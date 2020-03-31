@@ -15,10 +15,10 @@ TestRunResult = namedtuple('TestRunResult', [
 ])
 
 
-def create_result(model_instance, test_group, delta):
+def create_result(model_class, test_group, delta):
     return TestRunResult(
-        klass=model_instance.__class__.__name__,
-        properties_count=len(model_instance._properties.keys()),
+        klass=model_class.__name__,
+        properties_count=len(model_class._properties.keys()),
         test_group=test_group.value,
         row_count=1,
         iteration_count=SERIALIZATION_ITERATIONS,
@@ -44,3 +44,4 @@ MODEL_CLASSES = DB_MODEL_CLASSES + NDB_MODEL_CLASSES
 INSTANCES_TO_CREATE = 100
 NUM_INSTANCES_TO_DESERIALIZE = 20
 SERIALIZATION_ITERATIONS = 100
+READ_ITERATIONS = 100

@@ -19,7 +19,6 @@ def output(response, message):
     logging.info(message)
 
 
-
 ITERATIONS = 10
 
 
@@ -79,13 +78,6 @@ def find_keys_and_bench(response, model_class):
 
     bench(response, model_class, keys)
 
-
-class PythonListHolder(object):
-    def __init__(self):
-        self._list = [1]
-
-    def property_size(self):
-        return len(self._list)
 
 
 class DbEntityTest(webapp2.RequestHandler):

@@ -6,6 +6,7 @@ import subprocess
 GCLOUD_APP_ENGINE_PATH = '/platform/google_appengine'
 GCLOUD_BIN_SUFFIX = '/bin/gcloud'
 
+
 def main():
     # find the gcloud command and app engine paths
     gcloud_command = subprocess.check_output(('which', 'gcloud')).strip()

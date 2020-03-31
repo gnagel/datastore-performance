@@ -5,34 +5,52 @@ Google App Engine's Python original datastore library called "db" has very slow 
 
 ## Setup
 
-1. Install the `gcloud` tool: https://cloud.google.com/sdk/gcloud/ ; Install 
-2. Run `./setup_venv.py` to set up a Python virtualenv with the correct dependencies.
-3. Create a new App Engine project
+1. Build the docker-compose app
 
+   ```shell script
+   docker-compose build
+   ```
 
-## Run Tests
+2. Run the unit tests to verify the dependcies are setup and running correctly
 
-1. Run `./venv/bin/python -m unittest discover` to run all tests
+   ```shell script
+   docker-compose up -d
+   ```
 
+3. Create a new App Engine project to tests your code in:
 
-## Deploy
+   ```shell script
+   open "https://console.cloud.google.com/projectcreate"
+   ```
 
-1. Run `gcloud app deploy performance.yaml --project=[YOUR PROJECT ID]`
+4. Deploy your app to Google App Engine Standard (python 2.7)
 
+   ```shell script
+   docker-compose exec app gcloud auth login
+   docker-compose exec app gcloud config set project [YOUR PROJECT ID]
+   docker-compose exec app gcloud app deploy performance.yaml 
+   ```
+   
+   This will deploy your app to:
+   > https://performance-test-dot-[YOUR PROJECT ID].appspot.com
 
-## Test data generation
+## Benchmark Testing
 
-Create a set of instances that get used for the test. This needs to be done only once:
+1. Create a set of instances that get used for the test. This needs to be done only once:
 
-https://[YOUR PROJECT ID].appspot.com/db_entity_setup
+   ```shell script
+    open "https://performance-test-dot-[YOUR PROJECT ID].appspot.com/db_entity_setup"
+   ```
 
+2. Run the performance test
 
-## Run the performance test
+   ```shell script
+    open "https://performance-test-dot-[YOUR PROJECT ID].appspot.com/db_entity_test"
+   ```
 
-Go to the following URLs
-
-* https://[YOUR PROJECT ID].appspot.com/db_entity_test
-* https://[YOUR PROJECT ID].appspot.com/serialization_test
+   ```shell script
+    open "https://performance-test-dot-[YOUR PROJECT ID].appspot.com/serialization_test"
+   ```
 
 
 ## Results and notes

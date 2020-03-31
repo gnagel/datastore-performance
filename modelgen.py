@@ -1,5 +1,3 @@
-#!/usr/bin/python
-
 import random
 
 from google.appengine.ext import db
@@ -10,9 +8,10 @@ LETTERS_START = ord('a')
 LETTERS_END = ord('z') + 1
 BASE = LETTERS_END - LETTERS_START
 LETTERS = ""
-for i in xrange(LETTERS_START, LETTERS_END):
+for i in range(LETTERS_START, LETTERS_END):
     LETTERS += chr(i)
 assert len(LETTERS) == BASE
+
 
 def base26(i):
     out = ""
@@ -24,11 +23,12 @@ def base26(i):
             break
     return out
 
+
 def code(num_properties):
     out = []
     out.append('class Model%d(db.Model):' % num_properties)
 
-    for i in xrange(num_properties):
+    for i in range(num_properties):
         name = 'prop_' + base26(i)
         out.append('    %s = db.StringProperty(indexed=False)' % name)
 
@@ -36,9 +36,11 @@ def code(num_properties):
 
 
 STRING_LENGTH = 20
+
+
 def random_string():
     out = ""
-    for i in xrange(STRING_LENGTH):
+    for i in range(STRING_LENGTH):
         out += random.choice(LETTERS)
     return out
 

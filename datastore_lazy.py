@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 from google.appengine.api import datastore
 from google.appengine.api import datastore_types
 from google.appengine.datastore import datastore_rpc

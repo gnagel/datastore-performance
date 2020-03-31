@@ -1,6 +1,7 @@
 from google.appengine.ext import db
 from google.appengine.ext import ndb
 
+
 class Model10(db.Model):
     prop_a = db.StringProperty(indexed=False)
     prop_b = db.StringProperty(indexed=False)

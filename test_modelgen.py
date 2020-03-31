@@ -27,6 +27,6 @@ class Test(unittest.TestCase):
         self.assertEquals(modelgen.STRING_LENGTH, len(instance.bar))
         self.assertNotEquals(instance.foo, instance.bar)
 
-
-if __name__ == "__main__":
-    unittest.main()
+#
+# if __name__ == "__main__":
+#     unittest.main()

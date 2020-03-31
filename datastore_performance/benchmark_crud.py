@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 
 import time
+import uuid
 
 import enum
 
@@ -53,6 +54,76 @@ def _benchmark_READ_BULK(model_classs):
             model_classs.get(keys)
         end = time.time()
     return CrudTestGroups.READ_BULK, float(end - start)
+
+
+def _benchmark_CREATE_SINGLE_ROW(model_class):
+    rows = []
+    start = time.time()
+    for _ in range(SERIALIZATION_ITERATIONS):
+        row = model_class()
+        for property in row._properties.keys():
+            setattr(row, property, str(uuid.uuid4()))
+        row.put()
+        rows.append(row)
+    end = time.time()
+    # Cleanup after the test
+    for row in rows:
+        row.delte()
+    return CrudTestGroups.CREATE_SINGLE_ROW, float(end - start)
+
+
+def _benchmark_CREATE_MULTI_ROW(model_class):
+    rows = []
+    start = time.time()
+    for _ in range(SERIALIZATION_ITERATIONS):
+        local_rows = []
+        for _ in range(10):
+            row = model_class()
+            for property in row._properties.keys():
+                setattr(row, property, str(uuid.uuid4()))
+            local_rows.append(row)
+        model_class.put(local_rows)
+        rows.extend(local_rows)
+    end = time.time()
+    # Cleanup after the test
+    for row in rows:
+        row.delte()
+    return CrudTestGroups.CREATE_MULTI_ROW, float(end - start)
+
+
+def _benchmark_UPDATE_SINGLE_ROW(model_class):
+    with create_row(model_class) as row:
+        start = time.time()
+        for _ in range(SERIALIZATION_ITERATIONS):
+            for property in row._properties.keys():
+                setattr(row, property, str(uuid.uuid4()))
+            row.put()
+        end = time.time()
+    return CrudTestGroups.UPDATE_SINGLE_ROW, float(end - start)
+
+
+def _benchmark_UPDATE_MULTI_ROW(model_class):
+    with create_rows(model_class, 10) as rows:
+        start = time.time()
+        for _ in range(SERIALIZATION_ITERATIONS):
+            for row in rows:
+                for property in row._properties.keys():
+                    setattr(row, property, str(uuid.uuid4()))
+            model_class.put(rows)
+        end = time.time()
+    return CrudTestGroups.UPDATE_MULTI_ROW, float(end - start)
+
+
+def _benchmark_UPDATE_BULK_ROW(model_class):
+    with create_rows(model_class, SERIALIZATION_ITERATIONS) as rows:
+        start = time.time()
+        for _ in range(SERIALIZATION_ITERATIONS):
+            for row in rows:
+                for property in row._properties.keys():
+                    setattr(row, property, str(uuid.uuid4()))
+            model_class.put(rows)
+        end = time.time()
+    return CrudTestGroups.UPDATE_BULK_ROW, float(end - start)
 
 
 def bench(response, model_class, keys):

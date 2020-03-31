@@ -5,7 +5,6 @@ import time
 
 import webapp2
 from google.appengine.api import datastore
-from google.appengine.datastore import entity_pb
 from google.appengine.ext import db
 from google.appengine.ext import ndb
 
@@ -19,11 +18,6 @@ def output(response, message):
     response.write(message + '\n')
     logging.info(message)
 
-
-def ndb_get_multi_nocache(keys):
-    # disable NDB's caching since it bypasses all deserialization,
-    # which is what we want to measure
-    return ndb.get_multi(keys, use_cache=False, use_memcache=False)
 
 
 ITERATIONS = 10
@@ -68,7 +62,6 @@ def bench(response, model_class, keys):
             len(entities), (end - start), total))
 
 
-
 def find_keys_and_bench(response, model_class):
     # Query for models
     keys = model_class.keys(NUM_INSTANCES_TO_DESERIALIZE)
@@ -93,137 +86,6 @@ class PythonListHolder(object):
 
     def property_size(self):
         return len(self._list)
-
-
-SERIALIZATION_ITERATIONS = 100
-
-
-def benchmark_serialization(response, model_instance):
-    # How data gets from a db.Model subclass to bytes:
-    # 1. db.Model is converted to a datastore.Entity
-    # 2. datastore.Entity is converted to a protocol buffer object: EntityProto
-    # 3. EntityProto is serialized
-    start = time.time()
-    for _ in range(SERIALIZATION_ITERATIONS):
-        entity = model_instance._populate_entity(datastore.Entity)
-        entity_proto = entity.ToPb()
-        serialized = entity_proto.SerializeToString()
-    end = time.time()
-    output(response, 'serialized from model %d times in %f s' % (SERIALIZATION_ITERATIONS, end - start))
-
-    start = time.time()
-    for _ in range(SERIALIZATION_ITERATIONS):
-        entity_proto = entity.ToPb()
-        serialized = entity_proto.SerializeToString()
-    end = time.time()
-    output(response, 'serialized from datastore.Entity %d times in %f s' % (SERIALIZATION_ITERATIONS, end - start))
-
-    start = time.time()
-    for _ in range(SERIALIZATION_ITERATIONS):
-        serialized = entity_proto.SerializeToString()
-    end = time.time()
-    output(response, 'serialized from entity_pb.EntityProto %d times in %f s' % (SERIALIZATION_ITERATIONS, end - start))
-
-    start = time.time()
-    for _ in range(SERIALIZATION_ITERATIONS):
-        entity_proto = entity_pb.EntityProto(serialized)
-        entity = datastore.Entity.FromPb(entity_proto)
-        # from model_from_protobuf
-        deserialized = db.class_for_kind(entity.kind()).from_entity(entity)
-    end = time.time()
-    output(response, 'deserialized to model %d times in %f s' % (SERIALIZATION_ITERATIONS, end - start))
-
-    start = time.time()
-    for _ in range(SERIALIZATION_ITERATIONS):
-        entity_proto = entity_pb.EntityProto(serialized)
-        entity = datastore.Entity.FromPb(entity_proto)
-    end = time.time()
-    output(response, 'deserialized to datastore.Entity %d times in %f s' % (SERIALIZATION_ITERATIONS, end - start))
-
-    start = time.time()
-    for _ in range(SERIALIZATION_ITERATIONS):
-        entity_proto = entity_pb.EntityProto(serialized)
-    end = time.time()
-    output(response, 'deserialized to entity_pb.EntityProto %d times in %f s' % (SERIALIZATION_ITERATIONS, end - start))
-
-    start = time.time()
-    for _ in range(SERIALIZATION_ITERATIONS):
-        entity_proto.Clear()
-        entity_proto.MergeFromString(serialized)
-    end = time.time()
-    output(response, 'deserialized to entity_pb.EntityProto with reuse %d times in %f s' % (
-        SERIALIZATION_ITERATIONS, end - start))
-    output(response, '  (entity has %d keys)' % len(entity))
-
-    # model / LazyEntity property access tests
-    response.write('\n### model / LazyEntity property access times\n')
-    total_length = 0
-    start = time.time()
-    for _ in range(SERIALIZATION_ITERATIONS):
-        entity_proto = entity_pb.EntityProto(serialized)
-        entity = datastore.Entity.FromPb(entity_proto)
-        # from model_from_protobuf
-        deserialized = db.class_for_kind(entity.kind()).from_entity(entity)
-        total_length += len(deserialized.prop_a)
-    end = time.time()
-    output(response,
-           'model deserialized and accessed one property %d times in %f s' % (SERIALIZATION_ITERATIONS, end - start))
-
-    total_length = 0
-    start = time.time()
-    for _ in range(SERIALIZATION_ITERATIONS):
-        entity_proto = entity_pb.EntityProto(serialized)
-        entity = datastore.Entity.FromPb(entity_proto)
-        # from model_from_protobuf
-        deserialized = db.class_for_kind(entity.kind()).from_entity(entity)
-        total_length += len(deserialized.prop_a)
-        total_length += len(deserialized.prop_b)
-        total_length += len(deserialized.prop_c)
-        total_length += len(deserialized.prop_d)
-        total_length += len(deserialized.prop_e)
-    end = time.time()
-    output(response,
-           'model deserialized and accessed five properties %d times in %f s' % (SERIALIZATION_ITERATIONS, end - start))
-
-    total_length = 0
-    start = time.time()
-    for _ in range(SERIALIZATION_ITERATIONS):
-        entity_proto = entity_pb.EntityProto(serialized)
-        deserialized = datastore_lazy.LazyEntity(entity_proto)
-        total_length += len(deserialized.prop_a)
-    end = time.time()
-    output(response, 'LazyEntity deserialized and accessed one property %d times in %f s' % (
-        SERIALIZATION_ITERATIONS, end - start))
-
-    total_length = 0
-    start = time.time()
-    for _ in range(SERIALIZATION_ITERATIONS):
-        entity_proto = entity_pb.EntityProto(serialized)
-        deserialized = datastore_lazy.LazyEntity(entity_proto)
-        total_length += len(deserialized.prop_a)
-        total_length += len(deserialized.prop_b)
-        total_length += len(deserialized.prop_c)
-        total_length += len(deserialized.prop_d)
-        total_length += len(deserialized.prop_e)
-    end = time.time()
-    output(response, 'LazyEntity deserialized and accessed five properties %d times in %f s' % (
-        SERIALIZATION_ITERATIONS, end - start))
-
-    response.write('\n### protocol buffer / pure python access times\n')
-    total = 0
-    start = time.time()
-    for _ in range(SERIALIZATION_ITERATIONS):
-        total += entity_proto.property_size()
-    end = time.time()
-    output(response, 'protocol buffer entity_proto.property_size access in %f s' % (end - start))
-
-    total = 0
-    obj = PythonListHolder()
-    start = time.time()
-    for _ in range(SERIALIZATION_ITERATIONS):
-        total += obj.property_size()
-    end = time.time()
-    output(response, 'PythonListHolder.property_size access in %f s' % (end - start))
 
 
 class DbEntityTest(webapp2.RequestHandler):

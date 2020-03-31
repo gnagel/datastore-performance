@@ -8,6 +8,10 @@ def get(klass, key_strings):
 def put(klass, models):
     pass
 
+
+def delete(klass, models):
+    pass
+
 class PgQueryMixin(object):
 
     @classmethod
@@ -28,5 +32,12 @@ class PgQueryMixin(object):
         else:
             return results[0]
 
+    @classmethod
+    def delete(cls, models):
+        delete(cls, models)
+
     def put(self):
-        self.__class__.put(self)
+        self.__class__.put([self])
+
+    def delete(self):
+        self.__class__.delete([self])

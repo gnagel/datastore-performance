@@ -10,8 +10,6 @@ from google.appengine.ext import db
 from google.appengine.ext import ndb
 
 import datastore_lazy
-import modelgen
-import models_generated
 
 # Produces lots of output but lets you view what the entities actually look like
 DUMP_ENTITIES = False
@@ -32,15 +30,10 @@ ITERATIONS = 10
 
 
 def bench(response, model_class, keys):
-    if issubclass(model_class, db.Model):
-        get_func = db.get
-    else:
-        get_func = ndb_get_multi_nocache
-
     for i in range(ITERATIONS):
         total = 0
         start = time.time()
-        entities = get_func(keys)
+        entities = model_class.get(keys)
         end = time.time()
         output(response, '  %s.get %d entities in %f seconds (total: %d)' % (
             model_class.__name__, len(entities), (end - start), total))
@@ -75,54 +68,10 @@ def bench(response, model_class, keys):
             len(entities), (end - start), total))
 
 
-DB_MODEL_CLASSES = [
-    models_generated.Model10,
-    models_generated.Model100,
-    models_generated.Expando100,
-]
-NDB_MODEL_CLASSES = [
-    models_generated.NdbModel100,
-    models_generated.NdbExpando100,
-]
-MODEL_CLASSES = DB_MODEL_CLASSES + NDB_MODEL_CLASSES
-
-INSTANCES_TO_CREATE = 100
-
-
-class DbEntitySetup(webapp2.RequestHandler):
-    def get(self):
-        self.response.headers['Content-Type'] = 'text/plain;charset=UTF-8'
-
-        instances = []
-        ndb_instances = []
-        for _ in range(INSTANCES_TO_CREATE):
-            for model_class in MODEL_CLASSES:
-                instance = modelgen.instance(model_class)
-                if isinstance(instance, db.Model):
-                    instances.append(instance)
-                else:
-                    ndb_instances.append(instance)
-        db.put(instances)
-        ndb.put_multi(ndb_instances)
-        self.response.write('Put %d entities to the datastore' % (
-                len(instances) + len(ndb_instances)))
-
-
-NUM_INSTANCES_TO_DESERIALIZE = 20
-
-
-def find_keys(model_class, limit):
-    if issubclass(model_class, db.Model):
-        keys = list(model_class.all(keys_only=True).run(
-            limit=limit, batch_size=limit))
-    else:
-        keys = model_class.query().fetch(limit, keys_only=True)
-    return keys
-
 
 def find_keys_and_bench(response, model_class):
     # Query for models
-    keys = find_keys(model_class, NUM_INSTANCES_TO_DESERIALIZE)
+    keys = model_class.keys(NUM_INSTANCES_TO_DESERIALIZE)
 
     response.write('## ENTITY KEYS:\n')
     for key in keys:
@@ -275,11 +224,6 @@ def benchmark_serialization(response, model_instance):
         total += obj.property_size()
     end = time.time()
     output(response, 'PythonListHolder.property_size access in %f s' % (end - start))
-
-    # output(response, '\n')
-    # output(response, 'path: ' + repr(model_instance.key().to_path()))
-    # output(response, str(entity_proto))
-    # output(response, '\n')
 
 
 class DbEntityTest(webapp2.RequestHandler):

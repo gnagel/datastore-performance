@@ -34,6 +34,19 @@ Google App Engine's Python original datastore library called "db" has very slow 
    This will deploy your app to:
    > https://performance-test-dot-[YOUR PROJECT ID].appspot.com
 
+5. Developing the benchmark app. If you are doing development on the benchmark app and need to install new requirements run this to install them in the running container: 
+
+    ```shell script
+     docker-compose exec app pip install -r requirements.txt
+    ```
+
+    Or run this to tear it down and re-build the app entirely
+    ```shell script
+     docker-compose down
+     docker-compose build
+     docker-compose up -d 
+    ```
+
 ## Benchmark Testing
 
 1. Create a set of instances that get used for the test. This needs to be done only once:

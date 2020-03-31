@@ -1,0 +1,93 @@
+from __future__ import absolute_import
+
+from google.appengine.api.datastore import NormalizeAndTypeCheckKeys
+from google.appengine.ext import db
+from google.appengine.ext import ndb
+from datastore_performance import sql_api, ndb_api, db_api
+
+#
+# sql Models to test: 10x && 100x
+#
+# The `keys`, `get`, and `put` methods are provided by the helpers in `sql_api`.
+#
+class PgModel10(sql_api.PgQueryMixin, db.Model):
+    {% for index in range(10) -%}
+    prop_{{ index }} = db.StringProperty(indexed=False)
+    {% endfor %}
+
+
+class PgModel100(PgModel10):
+    {% for index in range(10, 100) -%}
+    prop_{{ index }} = db.StringProperty(indexed=False)
+    {% endfor %}
+
+
+#
+# db.Models to test: 10x && 100x
+#
+# The `keys` method is overridden here with the helpers in `db_api`.
+#
+class Model10(db_api.DbQueryMixin, db.Model):
+    {% for index in range(10) -%}
+    prop_{{ index }} = db.StringProperty(indexed=False)
+    {% endfor %}
+
+
+class Model100(Model10):
+    {% for index in range(10, 100) -%}
+    prop_{{ index }} = db.StringProperty(indexed=False)
+    {% endfor %}
+
+
+#
+# Expando Models to test: 10x && 100x
+#
+# The `keys` method is overridden here with the helpers in `db_api`.
+#
+class Expando10(db_api.DbQueryMixin, db.Expando):
+    {% for index in range(10) -%}
+    prop_{{ index }} = db.StringProperty(indexed=False)
+    {% endfor %}
+
+
+class Expando100(Expando10):
+    {% for index in range(10, 100) -%}
+    prop_{{ index }} = db.StringProperty(indexed=False)
+    {% endfor %}
+
+
+#
+# ndb.Models to test: 10x && 100x
+#
+# The `get` and `keys` methods are overridden here with the helpers in `ndb_api`.
+#
+class NdbModel10(ndb_api.NdbQueryMixin, ndb.Model):
+    # Use `ndb.StringProperty` instead of `db.StringProperty` here:
+    {% for index in range(10) -%}
+    prop_{{ index }} = ndb.StringProperty(indexed=False)
+    {% endfor %}
+
+
+class NdbModel100(NdbModel10):
+    # Use `ndb.StringProperty` instead of `db.StringProperty` here:
+    {% for index in range(10, 100) -%}
+    prop_{{ index }} = ndb.StringProperty(indexed=False)
+    {% endfor %}
+
+
+#
+# ndb.ExpandoModels to test: 10x && 100x
+#
+# The `get` and `keys` methods are overridden here with the helpers in `ndb_api`.
+#
+class NdbExpando10(ndb_api.NdbQueryMixin, ndb.Expando):
+    # Use `ndb.StringProperty` instead of `db.StringProperty` here:
+    {% for index in range(10) -%}
+    prop_{{ index }} = ndb.StringProperty(indexed=False)
+    {% endfor %}
+
+class NdbExpando100(NdbExpando10):
+    # Use `ndb.StringProperty` instead of `db.StringProperty` here:
+    {% for index in range(10, 100) -%}
+    prop_{{ index }} = ndb.StringProperty(indexed=False)
+    {% endfor %}

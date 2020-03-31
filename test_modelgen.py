@@ -1,8 +1,11 @@
+from __future__ import absolute_import
+
 import unittest
 
 from google.appengine.ext import db
+from google.appengine.ext import ndb
 
-import modelgen
+from datastore_performance import models
 
 
 class SomeModel(db.Model):
@@ -11,22 +14,19 @@ class SomeModel(db.Model):
 
 
 class Test(unittest.TestCase):
-    def test_code(self):
-        output = modelgen.code(10)
-
-        self.assertIn('Model10', output)
-        self.assertIn('prop_g', output)
-        output = modelgen.DB_IMPORT + "\n" + output
-
-        exec_globals = {}
-        exec output in exec_globals
-
-    def test_instance(self):
-        instance = modelgen.instance(SomeModel)
-        self.assertEquals(modelgen.STRING_LENGTH, len(instance.foo))
-        self.assertEquals(modelgen.STRING_LENGTH, len(instance.bar))
-        self.assertNotEquals(instance.foo, instance.bar)
-
-#
-# if __name__ == "__main__":
-#     unittest.main()
+    def test_generated_models(self):
+        model_types = [
+            (models.PgModel10, 10, db.Model,),
+            (models.PgModel100, 100, db.Model,),
+            (models.Model10, 10, db.Model,),
+            (models.Model100, 100, db.Model,),
+            (models.Expando10, 10, db.Expando,),
+            (models.Expando100, 100, db.Expando,),
+            (models.NdbModel10, 10, ndb.Model,),
+            (models.NdbModel100, 100, ndb.Model,),
+            (models.NdbExpando10, 10, ndb.Expando,),
+            (models.NdbExpando100, 100, ndb.Expando,),
+        ]
+        for (klass, properties_count, base_class) in model_types:
+            self.assertIsInstance(klass(), base_class)
+            self.assertEqual(properties_count, len(klass._properties.keys()))

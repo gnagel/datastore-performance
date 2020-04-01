@@ -12,6 +12,7 @@ def put(klass, models):
 def delete(klass, models):
     pass
 
+
 class PgQueryMixin(object):
 
     @classmethod

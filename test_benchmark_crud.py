@@ -6,7 +6,7 @@ import unittest
 from google.appengine.datastore import datastore_stub_index
 from google.appengine.ext import testbed
 
-from datastore_performance import benchmark_serialization
+from datastore_performance import benchmark_crud
 from datastore_performance.constants import DB_MODEL_CLASSES
 
 _testbed = None
@@ -34,13 +34,12 @@ def tearDownModule():
     # We need to create a new updater instance for every test because
     # the datastore is cleared on test setup.
     _index_updater.UpdateIndexYaml()
-
     _testbed.deactivate()
 
 
-class TestBenchmarkSerializationModels(unittest.TestCase):
-    def test_benchmark_serialization_models(self):
-        output = benchmark_serialization.benchmark_serialization_models()
+class TestBenchmarkCrud(unittest.TestCase):
+    def test_benchmark_crud_models(self):
+        output = benchmark_crud.benchmark_crud()
         count_models = len(DB_MODEL_CLASSES)
-        count_test_groups = len([x for x in benchmark_serialization.SerializationTestGroups])
+        count_test_groups = len([x for x in benchmark_crud.CrudTestGroups])
         self.assertEqual(len(output), count_models * count_test_groups)

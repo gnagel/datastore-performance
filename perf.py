@@ -9,8 +9,9 @@ from google.appengine.ext import db
 from google.appengine.ext import ndb
 
 import datastore_lazy
-
 # Produces lots of output but lets you view what the entities actually look like
+from datastore_performance.constants import NUM_INSTANCES_TO_DESERIALIZE
+
 DUMP_ENTITIES = False
 
 
@@ -77,7 +78,6 @@ def find_keys_and_bench(response, model_class):
         return
 
     bench(response, model_class, keys)
-
 
 
 class DbEntityTest(webapp2.RequestHandler):

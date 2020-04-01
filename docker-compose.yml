@@ -4,5 +4,5 @@ services:
     build: .
     command: tail -f /dev/null
     volumes:
-    - .:/app
-    - ~/.config/gcloud:/root/.config/gcloud
+      - .:/app
+      - ~/.config/gcloud:/root/.config/gcloud

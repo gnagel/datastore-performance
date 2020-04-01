@@ -1,9 +1,10 @@
 from __future__ import absolute_import
 
-from google.appengine.api.datastore import NormalizeAndTypeCheckKeys
 from google.appengine.ext import db
 from google.appengine.ext import ndb
+
 from datastore_performance import sql_api, ndb_api, db_api
+
 
 #
 # sql Models to test: 10x && 100x
@@ -21,7 +22,6 @@ class PgModel10(sql_api.PgQueryMixin, db.Model):
     prop_7 = db.StringProperty(indexed=False)
     prop_8 = db.StringProperty(indexed=False)
     prop_9 = db.StringProperty(indexed=False)
-    
 
 
 class PgModel100(PgModel10):
@@ -115,7 +115,6 @@ class PgModel100(PgModel10):
     prop_97 = db.StringProperty(indexed=False)
     prop_98 = db.StringProperty(indexed=False)
     prop_99 = db.StringProperty(indexed=False)
-    
 
 
 #
@@ -134,7 +133,6 @@ class Model10(db_api.DbQueryMixin, db.Model):
     prop_7 = db.StringProperty(indexed=False)
     prop_8 = db.StringProperty(indexed=False)
     prop_9 = db.StringProperty(indexed=False)
-    
 
 
 class Model100(Model10):
@@ -228,7 +226,6 @@ class Model100(Model10):
     prop_97 = db.StringProperty(indexed=False)
     prop_98 = db.StringProperty(indexed=False)
     prop_99 = db.StringProperty(indexed=False)
-    
 
 
 #
@@ -247,7 +244,6 @@ class Expando10(db_api.DbQueryMixin, db.Expando):
     prop_7 = db.StringProperty(indexed=False)
     prop_8 = db.StringProperty(indexed=False)
     prop_9 = db.StringProperty(indexed=False)
-    
 
 
 class Expando100(Expando10):
@@ -341,7 +337,6 @@ class Expando100(Expando10):
     prop_97 = db.StringProperty(indexed=False)
     prop_98 = db.StringProperty(indexed=False)
     prop_99 = db.StringProperty(indexed=False)
-    
 
 
 #
@@ -361,7 +356,6 @@ class NdbModel10(ndb_api.NdbQueryMixin, ndb.Model):
     prop_7 = ndb.StringProperty(indexed=False)
     prop_8 = ndb.StringProperty(indexed=False)
     prop_9 = ndb.StringProperty(indexed=False)
-    
 
 
 class NdbModel100(NdbModel10):
@@ -456,7 +450,6 @@ class NdbModel100(NdbModel10):
     prop_97 = ndb.StringProperty(indexed=False)
     prop_98 = ndb.StringProperty(indexed=False)
     prop_99 = ndb.StringProperty(indexed=False)
-    
 
 
 #
@@ -476,7 +469,7 @@ class NdbExpando10(ndb_api.NdbQueryMixin, ndb.Expando):
     prop_7 = ndb.StringProperty(indexed=False)
     prop_8 = ndb.StringProperty(indexed=False)
     prop_9 = ndb.StringProperty(indexed=False)
-    
+
 
 class NdbExpando100(NdbExpando10):
     # Use `ndb.StringProperty` instead of `db.StringProperty` here:
@@ -570,4 +563,3 @@ class NdbExpando100(NdbExpando10):
     prop_97 = ndb.StringProperty(indexed=False)
     prop_98 = ndb.StringProperty(indexed=False)
     prop_99 = ndb.StringProperty(indexed=False)
-    

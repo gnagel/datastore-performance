@@ -11,16 +11,16 @@ manual_scaling:
   instances: 1
 
 handlers:
-- url: /.*
-  script: perf.app
-  login: admin
-  secure: always
+  - url: /.*
+    script: perf.app
+    login: admin
+    secure: always
 
 skip_files:
-- ^(.*/)?#.*#$
-- ^(.*/)?.*~$
-- ^(.*/)?.*\.py[co]$
-- ^(.*/)?.*/RCS/.*$
-- ^(.*/)?\..*$
-# skip the entire venv directory
-- ^venv$
+  - ^(.*/)?#.*#$
+  - ^(.*/)?.*~$
+  - ^(.*/)?.*\.py[co]$
+  - ^(.*/)?.*/RCS/.*$
+  - ^(.*/)?\..*$
+  # skip the entire venv directory
+  - ^venv$

@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 
 from google.appengine.api import datastore
+from google.appengine.datastore import entity_pb
 from google.appengine.ext import db
 
 
@@ -22,6 +23,11 @@ class DbQueryMixin(object):
 
     def convert_to_entity(self):
         return self._populate_entity()
+
+    @classmethod
+    def convert_from_binary(cls, binary):
+        entity_proto = entity_pb.EntityProto(binary)
+        return cls.convert_from_proto(entity_proto)
 
     @classmethod
     def convert_from_proto(cls, entity_proto):

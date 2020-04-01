@@ -1,5 +1,6 @@
 from __future__ import absolute_import
 
+from google.appengine.datastore import entity_pb
 from google.appengine.ext import ndb
 
 
@@ -28,6 +29,11 @@ class NdbQueryMixin(object):
 
     def convert_to_proto(self):
         return self._to_pb()
+
+    @classmethod
+    def convert_from_binary(cls, serialized):
+        entity_proto = entity_pb.EntityProto(serialized)
+        return cls.convert_from_proto(entity_proto)
 
     @classmethod
     def convert_from_proto(cls, proto):

@@ -45,6 +45,17 @@ def model_classes():
 
 
 def create_result(model_class, test_group, seconds, iterations):
+    if seconds is None:
+        return TestRunResult(
+            klass=model_class.__name__,
+            properties_count=len(model_class._properties.keys()),
+            test_group=test_group.value,
+            row_count='N/A',
+            iteration_count=0,
+            total_milli_seconds='',
+            avg_milli_seconds='',
+        )
+
     avg_milli_seconds = (seconds * 1000 / float(iterations))
     avg_milli_seconds = int(avg_milli_seconds * 100) / 100.0
     return TestRunResult(
@@ -106,17 +117,21 @@ def _resolve_key(row):
 
 
 def benchmark_fn(fn, num_iterations):
-    start = time.time()
-    for _ in range(num_iterations):
-        fn()
-    end = time.time()
-    seconds = float(end - start)
-    return seconds
+    try:
+        start = time.time()
+        for _ in range(num_iterations):
+            fn()
+        end = time.time()
+        seconds = float(end - start)
+        return seconds
+    except NotImplementedError:
+        raise
+        # return None
 
 
 def format_csv(results):
     rows = []
-    for result in results:
+    for index, result in enumerate(results):
         klass = result.klass
         properties_count = result.properties_count
         test_name = result.test_group.split(': ')[0]
@@ -136,6 +151,9 @@ def format_csv(results):
             row_count,
             iteration_count,
         ]
+        # Space the test groups apart
+        if index > 0 and result.test_group != results[index-1].test_group:
+            rows.append([])
         rows.append(row)
 
     headers = [

@@ -13,13 +13,13 @@ SERIALIZATION_ITERATIONS = 1000
 
 @enum.unique
 class SerializationTestGroups(enum.Enum):
-    MODEL_TO_PROTOBUF_STRING = 'Serialize Model: model --> ... --> ... --> Protobuf binary (3-4x steps)'
-    ENTITY_TO_PROTOBUF_STRING = 'Serialize db.Entity: db.Entity --> ... --> Protobuf binary (2-3x steps)'
-    ENTITY_PROTO_TO_PROTOBUF_STRING = 'Serialize Protobuf data: entity_pb.EntityProto --> Protobuf binary (1x step)'
+    MODEL_TO_PROTOBUF_STRING = 'Serialize the Model into binary: model --> ... --> ... --> Protobuf binary (3-4x steps)'
+    ENTITY_TO_PROTOBUF_STRING = 'Serialize the db.Entity into binary: db.Entity --> ... --> Protobuf binary (2-3x steps)'
+    ENTITY_PROTO_TO_PROTOBUF_STRING = 'Serialize the entity_pb.Entity (proto) into binary: entity_pb.EntityProto --> Protobuf binary (1x step)'
 
-    PROTOBUF_STRING_TO_MODEL = 'Deserialize into Model: Protobuf binary --> ... --> Model (3-4x steps)'
-    PROTOBUF_STRING_TO_ENTITY = 'Deserialize into db.Entity: Protobuf binary --> ... --> db.Entity (2-3x steps)'
-    PROTOBUF_STRING_TO_ENTITY_PROTO = 'Deserialize into Protobuf data: Protobuf binary --> entity_pb.EntityProto (1x step)'
+    PROTOBUF_STRING_TO_MODEL = 'Deserialize binary to Model: Protobuf binary --> ... --> Model (3-4x steps)'
+    PROTOBUF_STRING_TO_ENTITY = 'Deserialize binary to db.Entity: Protobuf binary --> ... --> db.Entity (2-3x steps)'
+    PROTOBUF_STRING_TO_ENTITY_PROTO = 'Deserialize binary to entity_pb.Entity (proto): Protobuf binary --> entity_pb.EntityProto (1x step)'
     # PROTOBUF_STRING_TO_ENTITY_PROTO_WITH_REUSE = 'Deserialize: Protobuf binary --> entity_pb.EntityProto with protobuf reuse'
 
     SINGLE_PROPERTY_ACCESS_TIMES_PROTOBUF_TO_MODEL = 'Deserialize and read 1x property from the model: deserialize into Model w/ reading properties from the model'
@@ -46,36 +46,36 @@ def benchmark_serialization_models(klasses=None):
     # where the performance bottlenecks lie with model serialization/deserialization.
     #
     tests = [
-        # Serialize
+        # Serialize / deserialize the model
         _benchmark_MODEL_TO_PROTOBUF_STRING,
-        _benchmark_ENTITY_TO_PROTOBUF_STRING,
-        _benchmark_ENTITY_PROTO_TO_PROTOBUF_STRING,
-
-        # Deserialize
         _benchmark_PROTOBUF_STRING_TO_MODEL,
-        _benchmark_PROTOBUF_STRING_TO_ENTITY,
-        _benchmark_PROTOBUF_STRING_TO_ENTITY_PROTO,
-        # _benchmark_PROTOBUF_STRING_TO_ENTITY_PROTO_WITH_REUSE,
 
-        # Deserialize with property access
+        # Serialize / deserialize the db.Entity
+        _benchmark_ENTITY_TO_PROTOBUF_STRING,
+        _benchmark_PROTOBUF_STRING_TO_ENTITY,
+
+        # Serialize / deserialize the entity_pb Proto
+        _benchmark_ENTITY_PROTO_TO_PROTOBUF_STRING,
+        _benchmark_PROTOBUF_STRING_TO_ENTITY_PROTO,
+
+        # Serialize / Deserialize with property access
         _benchmark_SINGLE_PROPERTY_ACCESS_TIMES_PROTOBUF_TO_MODEL,
         _benchmark_MULTI_PROPERTY_ACCESS_TIMES_PROTOBUF_TO_MODEL,
-        _benchmark_SINGLE_LAZY_PROPERTY_ACCESS_TIMES_PROTOBUF_TO_MODEL,
+
         _benchmark_MULTI_LAZY_PROPERTY_ACCESS_TIMES_PROTOBUF_TO_MODEL,
+        _benchmark_SINGLE_LAZY_PROPERTY_ACCESS_TIMES_PROTOBUF_TO_MODEL,
 
         # Misc
         # _benchmark_PROTOBUF_PROPERTY_SIZE,
+        # _benchmark_PROTOBUF_STRING_TO_ENTITY_PROTO_WITH_REUSE,
     ]
     results = []
 
     for test in tests:
         for klass in klasses:
             # Execute the test on this model, skipping any tests that are not supported
-            try:
-                test_group, delta, iterations = test(klass)
-                results.append(create_result(klass, test_group, delta, iterations))
-            except NotImplementedError:
-                pass
+            test_group, delta, iterations = test(klass)
+            results.append(create_result(klass, test_group, delta, iterations))
     return results
 
 
@@ -91,7 +91,10 @@ def _benchmark_MODEL_TO_PROTOBUF_STRING(model_class):
 
 def _benchmark_ENTITY_TO_PROTOBUF_STRING(model_class):
     with create_row(model_class) as (row, key):
-        entity = row.convert_to_entity()
+        try:
+            entity = row.convert_to_entity()
+        except NotImplementedError:
+            return SerializationTestGroups.ENTITY_TO_PROTOBUF_STRING, None, None
 
         def fn():
             entity_proto = entity.ToPb()
@@ -118,9 +121,9 @@ def _benchmark_PROTOBUF_STRING_TO_MODEL(model_class):
         serialized = entity_proto.SerializeToString()
 
         def fn():
-            entity_proto = entity_pb.EntityProto(serialized)
-            entity = datastore.Entity.FromPb(entity_proto)
-            model_class.convert_from_entity(entity)
+            # entity_proto = entity_pb.EntityProto(serialized)
+            # entity = datastore.Entity.FromPb(entity_proto)
+            model_class.convert_from_binary(serialized)
 
         seconds = benchmark_fn(fn, SERIALIZATION_ITERATIONS)
         return SerializationTestGroups.PROTOBUF_STRING_TO_MODEL, seconds, SERIALIZATION_ITERATIONS
@@ -188,9 +191,10 @@ def _benchmark_MULTI_PROPERTY_ACCESS_TIMES_PROTOBUF_TO_MODEL(model_class):
         serialized = entity_proto.SerializeToString()
 
         def fn():
-            entity_proto = entity_pb.EntityProto(serialized)
-            entity = datastore.Entity.FromPb(entity_proto)
-            deserialized = model_class.convert_from_entity(entity)
+            # entity_proto = entity_pb.EntityProto(serialized)
+            # entity = datastore.Entity.FromPb(entity_proto)
+            # deserialized = model_class.convert_from_entity(entity)
+            deserialized = model_class.convert_from_binary(serialized)
             len(deserialized.prop_0)
             len(deserialized.prop_1)
             len(deserialized.prop_2)

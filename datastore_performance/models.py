@@ -1,10 +1,9 @@
 from __future__ import absolute_import
 
+from google.appengine.api.datastore import NormalizeAndTypeCheckKeys
 from google.appengine.ext import db
 from google.appengine.ext import ndb
-
 from datastore_performance import sql_api, ndb_api, db_api
-
 
 #
 # sql Models to test: 10x && 100x
@@ -12,6 +11,7 @@ from datastore_performance import sql_api, ndb_api, db_api
 # The `keys`, `get`, and `put` methods are provided by the helpers in `sql_api`.
 #
 class PgModel10(sql_api.PgQueryMixin, db.Model):
+
     prop_0 = db.StringProperty(indexed=False)
     prop_1 = db.StringProperty(indexed=False)
     prop_2 = db.StringProperty(indexed=False)
@@ -25,6 +25,7 @@ class PgModel10(sql_api.PgQueryMixin, db.Model):
 
 
 class PgModel100(PgModel10):
+
     prop_10 = db.StringProperty(indexed=False)
     prop_11 = db.StringProperty(indexed=False)
     prop_12 = db.StringProperty(indexed=False)
@@ -122,7 +123,8 @@ class PgModel100(PgModel10):
 #
 # The `keys` method is overridden here with the helpers in `db_api`.
 #
-class Model10(db_api.DbQueryMixin, db.Model):
+class DbModel10(db_api.DbQueryMixin, db.Model):
+
     prop_0 = db.StringProperty(indexed=False)
     prop_1 = db.StringProperty(indexed=False)
     prop_2 = db.StringProperty(indexed=False)
@@ -135,7 +137,8 @@ class Model10(db_api.DbQueryMixin, db.Model):
     prop_9 = db.StringProperty(indexed=False)
 
 
-class Model100(Model10):
+class DbModel100(DbModel10):
+
     prop_10 = db.StringProperty(indexed=False)
     prop_11 = db.StringProperty(indexed=False)
     prop_12 = db.StringProperty(indexed=False)
@@ -233,7 +236,8 @@ class Model100(Model10):
 #
 # The `keys` method is overridden here with the helpers in `db_api`.
 #
-class Expando10(db_api.DbQueryMixin, db.Expando):
+class DbExpando10(db_api.DbQueryMixin, db.Expando):
+
     prop_0 = db.StringProperty(indexed=False)
     prop_1 = db.StringProperty(indexed=False)
     prop_2 = db.StringProperty(indexed=False)
@@ -246,7 +250,8 @@ class Expando10(db_api.DbQueryMixin, db.Expando):
     prop_9 = db.StringProperty(indexed=False)
 
 
-class Expando100(Expando10):
+class DbExpando100(DbExpando10):
+
     prop_10 = db.StringProperty(indexed=False)
     prop_11 = db.StringProperty(indexed=False)
     prop_12 = db.StringProperty(indexed=False)
@@ -344,8 +349,10 @@ class Expando100(Expando10):
 #
 # The `get` and `keys` methods are overridden here with the helpers in `ndb_api`.
 #
+
+# Use `ndb.StringProperty` instead of `db.StringProperty` here:
 class NdbModel10(ndb_api.NdbQueryMixin, ndb.Model):
-    # Use `ndb.StringProperty` instead of `db.StringProperty` here:
+
     prop_0 = ndb.StringProperty(indexed=False)
     prop_1 = ndb.StringProperty(indexed=False)
     prop_2 = ndb.StringProperty(indexed=False)
@@ -358,8 +365,9 @@ class NdbModel10(ndb_api.NdbQueryMixin, ndb.Model):
     prop_9 = ndb.StringProperty(indexed=False)
 
 
+# Use `ndb.StringProperty` instead of `db.StringProperty` here:
 class NdbModel100(NdbModel10):
-    # Use `ndb.StringProperty` instead of `db.StringProperty` here:
+
     prop_10 = ndb.StringProperty(indexed=False)
     prop_11 = ndb.StringProperty(indexed=False)
     prop_12 = ndb.StringProperty(indexed=False)
@@ -457,8 +465,10 @@ class NdbModel100(NdbModel10):
 #
 # The `get` and `keys` methods are overridden here with the helpers in `ndb_api`.
 #
+
+# Use `ndb.StringProperty` instead of `db.StringProperty` here:
 class NdbExpando10(ndb_api.NdbQueryMixin, ndb.Expando):
-    # Use `ndb.StringProperty` instead of `db.StringProperty` here:
+
     prop_0 = ndb.StringProperty(indexed=False)
     prop_1 = ndb.StringProperty(indexed=False)
     prop_2 = ndb.StringProperty(indexed=False)
@@ -470,9 +480,9 @@ class NdbExpando10(ndb_api.NdbQueryMixin, ndb.Expando):
     prop_8 = ndb.StringProperty(indexed=False)
     prop_9 = ndb.StringProperty(indexed=False)
 
-
+# Use `ndb.StringProperty` instead of `db.StringProperty` here:
 class NdbExpando100(NdbExpando10):
-    # Use `ndb.StringProperty` instead of `db.StringProperty` here:
+
     prop_10 = ndb.StringProperty(indexed=False)
     prop_11 = ndb.StringProperty(indexed=False)
     prop_12 = ndb.StringProperty(indexed=False)

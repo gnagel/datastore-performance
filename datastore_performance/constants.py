@@ -10,7 +10,6 @@ from contextlib import contextmanager
 
 from google.appengine.ext import ndb
 
-from datastore_performance import models
 
 TestRunResult = namedtuple('TestRunResult', [
     'klass',
@@ -22,35 +21,40 @@ TestRunResult = namedtuple('TestRunResult', [
     'avg_milli_seconds',
 ])
 
-DB_MODEL_CLASSES = [
-    models.Model10,
-    models.Model100,
-    models.Expando10,
-    models.Expando100,
-]
-NDB_MODEL_CLASSES = [
-    models.NdbModel10,
-    models.NdbModel100,
-    models.NdbExpando10,
-    models.NdbExpando100,
-]
-MODEL_CLASSES = DB_MODEL_CLASSES + NDB_MODEL_CLASSES
-
 INSTANCES_TO_CREATE = 100
 NUM_INSTANCES_TO_DESERIALIZE = 20
-SERIALIZATION_ITERATIONS = 100
 READ_ITERATIONS = 100
 
 
+def model_classes():
+    from datastore_performance import models
+    model_classes = [
+        models.DbModel10,
+        models.NdbModel10,
+
+        models.DbExpando10,
+        models.NdbExpando10,
+
+        models.DbModel100,
+        models.NdbModel100,
+
+        models.DbExpando100,
+        models.NdbExpando100,
+    ]
+    return model_classes
+
+
 def create_result(model_class, test_group, seconds, iterations):
+    avg_milli_seconds = (seconds * 1000 / float(iterations))
+    avg_milli_seconds = int(avg_milli_seconds * 100) / 100.0
     return TestRunResult(
         klass=model_class.__name__,
         properties_count=len(model_class._properties.keys()),
         test_group=test_group.value,
         row_count=1,
-        iteration_count=SERIALIZATION_ITERATIONS,
+        iteration_count=iterations,
         total_milli_seconds=math.floor(seconds * 1000),
-        avg_milli_seconds=(seconds * 1000 / float(iterations)),
+        avg_milli_seconds=avg_milli_seconds,
     )
 
 
@@ -59,18 +63,18 @@ def create_row(model_class):
     row = model_class()
     for property in row._properties.keys():
         setattr(row, property, str(uuid.uuid4()))
-    model_class.put(row)
+    model_class.put([row])
 
     key = _resolve_key(row)
 
     # Wait till the data syncs to Datastore
-    while not model_class.get(key):
-        time.sleep(0.5)
+    while not filter(lambda x: x, model_class.get([key])):
+        time.sleep(0.1)
 
     try:
         yield row, key
     finally:
-        model_class.delete(row)
+        model_class.delete([row])
 
 
 @contextmanager
@@ -86,7 +90,7 @@ def create_rows(model_class, count):
     # Wait till the data syncs to Datastore
     keys = map(_resolve_key, rows)
     while len(filter(lambda x: x, model_class.get(keys))) != len(rows):
-        time.sleep(0.5)
+        time.sleep(0.1)
 
     try:
         yield rows, keys
@@ -96,7 +100,7 @@ def create_rows(model_class, count):
 
 def _resolve_key(row):
     if issubclass(row.__class__, ndb.Model):
-        return row.key().to_old_key()
+        return row.key
     else:
         return row.key()
 
@@ -115,8 +119,8 @@ def format_csv(results):
     for result in results:
         klass = result.klass
         properties_count = result.properties_count
-        test_name = result.test_group.split(' : ')[0]
-        test_description = ' : '.join(result.test_group.split(' : ')[1:])
+        test_name = result.test_group.split(': ')[0]
+        test_description = ': '.join(result.test_group.split(': ')[1:])
         row_count = result.row_count
         iteration_count = result.iteration_count
         total_milli_seconds = result.total_milli_seconds
@@ -126,23 +130,23 @@ def format_csv(results):
             test_name,
             test_description,
             klass,
+            avg_milli_seconds,
+            total_milli_seconds,
             properties_count,
             row_count,
             iteration_count,
-            total_milli_seconds,
-            avg_milli_seconds,
         ]
         rows.append(row)
 
     headers = [
-        'test_group',
-        'test_description',
-        'klass',
-        'properties_count',
-        'row_count',
-        'iteration_count',
-        'total_milli_seconds',
-        'avg_milli_seconds',
+        'Operation',
+        'Description of test',
+        'Model Name',
+        'Avg Milliseconds per call',
+        'Total Milliseconds all iterations',
+        'Number of Columns',
+        'Number of Rows',
+        'Number of Iterations',
     ]
     return csv2string(headers, rows)
 

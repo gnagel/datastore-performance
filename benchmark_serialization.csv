@@ -1,0 +1,69 @@
+Operation,Description of test,Model Name,Avg Milliseconds per call,Total Milliseconds all iterations,Number of Columns,Number of Rows,Number of Iterations
+deserialize and read 1x property from the model,deserialize into Model w/ reading properties from the model,DbModel10,0.36,368.0,10,1,1000
+deserialize and read 1x property from the model,deserialize into Model w/ reading properties from the model,NdbModel10,0.27,275.0,10,1,1000
+deserialize and read 1x property from the model,deserialize into Model w/ reading properties from the model,DbExpando10,0.64,642.0,10,1,1000
+deserialize and read 1x property from the model,deserialize into Model w/ reading properties from the model,NdbExpando10,0.33,332.0,10,1,1000
+deserialize and read 1x property from the model,deserialize into Model w/ reading properties from the model,DbModel100,2.51,2513.0,100,1,1000
+deserialize and read 1x property from the model,deserialize into Model w/ reading properties from the model,NdbModel100,1.92,1924.0,100,1,1000
+deserialize and read 1x property from the model,deserialize into Model w/ reading properties from the model,DbExpando100,3.55,3551.0,100,1,1000
+deserialize and read 1x property from the model,deserialize into Model w/ reading properties from the model,NdbExpando100,1.85,1852.0,100,1,1000
+deserialize and read 10x properties from the model,deserialize into Model w/ reading properties from the model,DbModel10,0.41,416.0,10,1,1000
+deserialize and read 10x properties from the model,deserialize into Model w/ reading properties from the model,DbExpando10,0.62,624.0,10,1,1000
+deserialize and read 10x properties from the model,deserialize into Model w/ reading properties from the model,DbModel100,2.42,2420.0,100,1,1000
+deserialize and read 10x properties from the model,deserialize into Model w/ reading properties from the model,DbExpando100,3.61,3614.0,100,1,1000
+deserialize and lazily read 1x property from the model,deserialize into Model w/ reading properties from the model,DbModel10,0.18,183.0,10,1,1000
+deserialize and lazily read 1x property from the model,deserialize into Model w/ reading properties from the model,NdbModel10,0.19,195.0,10,1,1000
+deserialize and lazily read 1x property from the model,deserialize into Model w/ reading properties from the model,DbExpando10,0.18,182.0,10,1,1000
+deserialize and lazily read 1x property from the model,deserialize into Model w/ reading properties from the model,NdbExpando10,0.19,195.0,10,1,1000
+deserialize and lazily read 1x property from the model,deserialize into Model w/ reading properties from the model,DbModel100,1.33,1336.0,100,1,1000
+deserialize and lazily read 1x property from the model,deserialize into Model w/ reading properties from the model,NdbModel100,1.51,1517.0,100,1,1000
+deserialize and lazily read 1x property from the model,deserialize into Model w/ reading properties from the model,DbExpando100,1.42,1420.0,100,1,1000
+deserialize and lazily read 1x property from the model,deserialize into Model w/ reading properties from the model,NdbExpando100,1.63,1630.0,100,1,1000
+deserialize and lazily read 10x properties from the model,deserialize into Model w/ reading properties from the model,DbModel10,0.21,213.0,10,1,1000
+deserialize and lazily read 10x properties from the model,deserialize into Model w/ reading properties from the model,NdbModel10,0.24,243.0,10,1,1000
+deserialize and lazily read 10x properties from the model,deserialize into Model w/ reading properties from the model,DbExpando10,0.2,206.0,10,1,1000
+deserialize and lazily read 10x properties from the model,deserialize into Model w/ reading properties from the model,NdbExpando10,0.23,230.0,10,1,1000
+deserialize and lazily read 10x properties from the model,deserialize into Model w/ reading properties from the model,DbModel100,1.37,1378.0,100,1,1000
+deserialize and lazily read 10x properties from the model,deserialize into Model w/ reading properties from the model,NdbModel100,1.58,1587.0,100,1,1000
+deserialize and lazily read 10x properties from the model,deserialize into Model w/ reading properties from the model,DbExpando100,1.38,1388.0,100,1,1000
+deserialize and lazily read 10x properties from the model,deserialize into Model w/ reading properties from the model,NdbExpando100,1.52,1521.0,100,1,1000
+serialize Model,model --> ... --> ... --> Protobuf binary (3-4x steps),DbModel10,0.28,287.0,10,1,1000
+serialize Model,model --> ... --> ... --> Protobuf binary (3-4x steps),NdbModel10,0.21,214.0,10,1,1000
+serialize Model,model --> ... --> ... --> Protobuf binary (3-4x steps),DbExpando10,0.33,330.0,10,1,1000
+serialize Model,model --> ... --> ... --> Protobuf binary (3-4x steps),NdbExpando10,0.21,217.0,10,1,1000
+serialize Model,model --> ... --> ... --> Protobuf binary (3-4x steps),DbModel100,2.27,2278.0,100,1,1000
+serialize Model,model --> ... --> ... --> Protobuf binary (3-4x steps),NdbModel100,1.76,1766.0,100,1,1000
+serialize Model,model --> ... --> ... --> Protobuf binary (3-4x steps),DbExpando100,2.61,2617.0,100,1,1000
+serialize Model,model --> ... --> ... --> Protobuf binary (3-4x steps),NdbExpando100,1.73,1730.0,100,1,1000
+serialize db.Entity,db.Entity --> ... --> Protobuf binary (2-3x steps),DbModel10,0.21,213.0,10,1,1000
+serialize db.Entity,db.Entity --> ... --> Protobuf binary (2-3x steps),DbExpando10,0.22,223.0,10,1,1000
+serialize db.Entity,db.Entity --> ... --> Protobuf binary (2-3x steps),DbModel100,1.67,1679.0,100,1,1000
+serialize db.Entity,db.Entity --> ... --> Protobuf binary (2-3x steps),DbExpando100,1.69,1694.0,100,1,1000
+serialize Protobuf data,entity_pb.EntityProto --> Protobuf binary (1x step),DbModel10,0.12,121.0,10,1,1000
+serialize Protobuf data,entity_pb.EntityProto --> Protobuf binary (1x step),NdbModel10,0.13,130.0,10,1,1000
+serialize Protobuf data,entity_pb.EntityProto --> Protobuf binary (1x step),DbExpando10,0.12,127.0,10,1,1000
+serialize Protobuf data,entity_pb.EntityProto --> Protobuf binary (1x step),NdbExpando10,0.13,137.0,10,1,1000
+serialize Protobuf data,entity_pb.EntityProto --> Protobuf binary (1x step),DbModel100,1.06,1065.0,100,1,1000
+serialize Protobuf data,entity_pb.EntityProto --> Protobuf binary (1x step),NdbModel100,1.22,1221.0,100,1,1000
+serialize Protobuf data,entity_pb.EntityProto --> Protobuf binary (1x step),DbExpando100,1.0,1005.0,100,1,1000
+serialize Protobuf data,entity_pb.EntityProto --> Protobuf binary (1x step),NdbExpando100,1.09,1097.0,100,1,1000
+deserialize into Model,Protobuf binary --> ... --> Model (3-4x steps),DbModel10,0.33,334.0,10,1,1000
+deserialize into Model,Protobuf binary --> ... --> Model (3-4x steps),DbExpando10,0.55,550.0,10,1,1000
+deserialize into Model,Protobuf binary --> ... --> Model (3-4x steps),DbModel100,2.56,2563.0,100,1,1000
+deserialize into Model,Protobuf binary --> ... --> Model (3-4x steps),DbExpando100,3.8,3806.0,100,1,1000
+deserialize into db.Entity,Protobuf binary --> ... --> db.Entity (2-3x steps),DbModel10,0.27,274.0,10,1,1000
+deserialize into db.Entity,Protobuf binary --> ... --> db.Entity (2-3x steps),NdbModel10,0.3,303.0,10,1,1000
+deserialize into db.Entity,Protobuf binary --> ... --> db.Entity (2-3x steps),DbExpando10,0.27,272.0,10,1,1000
+deserialize into db.Entity,Protobuf binary --> ... --> db.Entity (2-3x steps),NdbExpando10,0.29,299.0,10,1,1000
+deserialize into db.Entity,Protobuf binary --> ... --> db.Entity (2-3x steps),DbModel100,2.03,2039.0,100,1,1000
+deserialize into db.Entity,Protobuf binary --> ... --> db.Entity (2-3x steps),NdbModel100,2.3,2308.0,100,1,1000
+deserialize into db.Entity,Protobuf binary --> ... --> db.Entity (2-3x steps),DbExpando100,2.06,2068.0,100,1,1000
+deserialize into db.Entity,Protobuf binary --> ... --> db.Entity (2-3x steps),NdbExpando100,2.31,2312.0,100,1,1000
+deserialize into Protobuf data,Protobuf binary --> entity_pb.EntityProto (1x step),DbModel10,0.28,281.0,10,1,1000
+deserialize into Protobuf data,Protobuf binary --> entity_pb.EntityProto (1x step),NdbModel10,0.3,301.0,10,1,1000
+deserialize into Protobuf data,Protobuf binary --> entity_pb.EntityProto (1x step),DbExpando10,0.27,272.0,10,1,1000
+deserialize into Protobuf data,Protobuf binary --> entity_pb.EntityProto (1x step),NdbExpando10,0.29,296.0,10,1,1000
+deserialize into Protobuf data,Protobuf binary --> entity_pb.EntityProto (1x step),DbModel100,2.04,2043.0,100,1,1000
+deserialize into Protobuf data,Protobuf binary --> entity_pb.EntityProto (1x step),NdbModel100,2.36,2361.0,100,1,1000
+deserialize into Protobuf data,Protobuf binary --> entity_pb.EntityProto (1x step),DbExpando100,2.05,2051.0,100,1,1000
+deserialize into Protobuf data,Protobuf binary --> entity_pb.EntityProto (1x step),NdbExpando100,2.31,2310.0,100,1,1000

@@ -7,7 +7,7 @@ from google.appengine.datastore import datastore_stub_index
 from google.appengine.ext import testbed
 
 from datastore_performance import benchmark_crud
-from datastore_performance.constants import DB_MODEL_CLASSES
+from datastore_performance.constants import model_classes
 
 _testbed = None
 _index_yaml_path = None
@@ -39,8 +39,9 @@ def tearDownModule():
 
 class TestBenchmarkCrud(unittest.TestCase):
     def test_benchmark_crud_models(self):
-        output = benchmark_crud.benchmark_crud()
-        count_models = len(DB_MODEL_CLASSES)
+        klasses = model_classes()[:2]
+        output = benchmark_crud.benchmark_crud_models(klasses)
+        count_models = len(klasses)
         count_test_groups = len([x for x in benchmark_crud.CrudTestGroups])
         self.assertEqual(len(output), count_models * count_test_groups)
 

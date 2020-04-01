@@ -1,0 +1,161 @@
+Operation,Description of test,Model Name,Avg Milliseconds per call,Total Milliseconds all iterations,Number of Columns,Number of Rows,Number of Iterations
+read,fetch a single row,DbModel10,0.87,0.0,10,1,1
+read,fetch a single row,NdbModel10,1.07,1.0,10,1,1
+read,fetch a single row,DbExpando10,1.06,1.0,10,1,1
+read,fetch a single row,NdbExpando10,1.07,1.0,10,1,1
+read,fetch a single row,DbModel100,5.2,5.0,100,1,1
+read,fetch a single row,NdbModel100,4.4,4.0,100,1,1
+read,fetch a single row,DbExpando100,5.67,5.0,100,1,1
+read,fetch a single row,NdbExpando100,6.1,6.0,100,1,1
+read,fetch 20x rows,DbModel10,17.17,17.0,10,1,1
+read,fetch 20x rows,NdbModel10,16.28,16.0,10,1,1
+read,fetch 20x rows,DbExpando10,18.52,18.0,10,1,1
+read,fetch 20x rows,NdbExpando10,52.26,52.0,10,1,1
+read,fetch 20x rows,DbModel100,106.12,106.0,100,1,1
+read,fetch 20x rows,NdbModel100,114.32,114.0,100,1,1
+read,fetch 20x rows,DbExpando100,125.0,125.0,100,1,1
+read,fetch 20x rows,NdbExpando100,86.18,86.0,100,1,1
+read,fetch 100x rows from the database at at time,DbModel10,73.3,73.0,10,1,1
+read,fetch 100x rows from the database at at time,NdbModel10,80.88,80.0,10,1,1
+read,fetch 100x rows from the database at at time,DbExpando10,93.53,93.0,10,1,1
+read,fetch 100x rows from the database at at time,NdbExpando10,91.28,91.0,10,1,1
+read,fetch 100x rows from the database at at time,DbModel100,579.85,579.0,100,1,1
+read,fetch 100x rows from the database at at time,NdbModel100,503.03,503.0,100,1,1
+read,fetch 100x rows from the database at at time,DbExpando100,607.76,607.0,100,1,1
+read,fetch 100x rows from the database at at time,NdbExpando100,537.01,537.0,100,1,1
+read missing,fetch 100x from the database that dont exist,DbModel10,17.26,17.0,10,1,1
+read missing,fetch 100x from the database that dont exist,NdbModel10,32.5,32.0,10,1,1
+read missing,fetch 100x from the database that dont exist,DbExpando10,17.27,17.0,10,1,1
+read missing,fetch 100x from the database that dont exist,NdbExpando10,31.43,31.0,10,1,1
+read missing,fetch 100x from the database that dont exist,DbModel100,17.32,17.0,100,1,1
+read missing,fetch 100x from the database that dont exist,NdbModel100,31.76,31.0,100,1,1
+read missing,fetch 100x from the database that dont exist,DbExpando100,17.35,17.0,100,1,1
+read missing,fetch 100x from the database that dont exist,NdbExpando100,31.69,31.0,100,1,1
+async read,fetch a single row,DbModel10,0.81,0.0,10,1,1
+async read,fetch a single row,NdbModel10,0.84,0.0,10,1,1
+async read,fetch a single row,DbExpando10,0.79,0.0,10,1,1
+async read,fetch a single row,NdbExpando10,0.89,0.0,10,1,1
+async read,fetch a single row,DbModel100,4.47,4.0,100,1,1
+async read,fetch a single row,NdbModel100,4.85,4.0,100,1,1
+async read,fetch a single row,DbExpando100,32.2,32.0,100,1,1
+async read,fetch a single row,NdbExpando100,4.71,4.0,100,1,1
+async read,fetch 20x rows,DbModel10,14.09,14.0,10,1,1
+async read,fetch 20x rows,NdbModel10,15.44,15.0,10,1,1
+async read,fetch 20x rows,DbExpando10,16.05,16.0,10,1,1
+async read,fetch 20x rows,NdbExpando10,14.56,14.0,10,1,1
+async read,fetch 20x rows,DbModel100,89.41,89.0,100,1,1
+async read,fetch 20x rows,NdbModel100,96.14,96.0,100,1,1
+async read,fetch 20x rows,DbExpando100,90.47,90.0,100,1,1
+async read,fetch 20x rows,NdbExpando100,129.5,129.0,100,1,1
+async read,fetch 100x rows from the database at at time,DbModel10,73.54,73.0,10,1,1
+async read,fetch 100x rows from the database at at time,NdbModel10,73.02,73.0,10,1,1
+async read,fetch 100x rows from the database at at time,DbExpando10,70.57,70.0,10,1,1
+async read,fetch 100x rows from the database at at time,NdbExpando10,74.6,74.0,10,1,1
+async read,fetch 100x rows from the database at at time,DbModel100,493.73,493.0,100,1,1
+async read,fetch 100x rows from the database at at time,NdbModel100,533.26,533.0,100,1,1
+async read,fetch 100x rows from the database at at time,DbExpando100,599.44,599.0,100,1,1
+async read,fetch 100x rows from the database at at time,NdbExpando100,591.37,591.0,100,1,1
+async read missing,fetch 100x from the database that dont exist,DbModel10,17.48,17.0,10,1,1
+async read missing,fetch 100x from the database that dont exist,NdbModel10,19.22,19.0,10,1,1
+async read missing,fetch 100x from the database that dont exist,DbExpando10,18.1,18.0,10,1,1
+async read missing,fetch 100x from the database that dont exist,NdbExpando10,19.05,19.0,10,1,1
+async read missing,fetch 100x from the database that dont exist,DbModel100,17.59,17.0,100,1,1
+async read missing,fetch 100x from the database that dont exist,NdbModel100,19.06,19.0,100,1,1
+async read missing,fetch 100x from the database that dont exist,DbExpando100,19.49,19.0,100,1,1
+async read missing,fetch 100x from the database that dont exist,NdbExpando100,17.7,17.0,100,1,1
+lazy read,fetch a single row,DbModel10,0.7,0.0,10,1,1
+lazy read,fetch a single row,NdbModel10,1.03,1.0,10,1,1
+lazy read,fetch a single row,DbExpando10,0.71,0.0,10,1,1
+lazy read,fetch a single row,NdbExpando10,0.79,0.0,10,1,1
+lazy read,fetch a single row,DbModel100,3.66,3.0,100,1,1
+lazy read,fetch a single row,NdbModel100,3.97,3.0,100,1,1
+lazy read,fetch a single row,DbExpando100,5.1,5.0,100,1,1
+lazy read,fetch a single row,NdbExpando100,4.14,4.0,100,1,1
+lazy read,fetch 20x rows,DbModel10,11.86,11.0,10,1,1
+lazy read,fetch 20x rows,NdbModel10,12.53,12.0,10,1,1
+lazy read,fetch 20x rows,DbExpando10,12.08,12.0,10,1,1
+lazy read,fetch 20x rows,NdbExpando10,12.9,12.0,10,1,1
+lazy read,fetch 20x rows,DbModel100,78.76,78.0,100,1,1
+lazy read,fetch 20x rows,NdbModel100,90.95,90.0,100,1,1
+lazy read,fetch 20x rows,DbExpando100,78.88,78.0,100,1,1
+lazy read,fetch 20x rows,NdbExpando100,85.31,85.0,100,1,1
+lazy read,fetch 100x rows from the database at at time,DbModel10,65.31,65.0,10,1,1
+lazy read,fetch 100x rows from the database at at time,NdbModel10,76.6,76.0,10,1,1
+lazy read,fetch 100x rows from the database at at time,DbExpando10,65.47,65.0,10,1,1
+lazy read,fetch 100x rows from the database at at time,NdbExpando10,66.59,66.0,10,1,1
+lazy read,fetch 100x rows from the database at at time,DbModel100,445.9,445.0,100,1,1
+lazy read,fetch 100x rows from the database at at time,NdbModel100,475.29,475.0,100,1,1
+lazy read,fetch 100x rows from the database at at time,DbExpando100,464.49,464.0,100,1,1
+lazy read,fetch 100x rows from the database at at time,NdbExpando100,486.36,486.0,100,1,1
+lazy read missing,fetch 100x from the database that dont exist,DbModel10,18.58,18.0,10,1,1
+lazy read missing,fetch 100x from the database that dont exist,NdbModel10,18.02,18.0,10,1,1
+lazy read missing,fetch 100x from the database that dont exist,DbExpando10,18.13,18.0,10,1,1
+lazy read missing,fetch 100x from the database that dont exist,NdbExpando10,18.26,18.0,10,1,1
+lazy read missing,fetch 100x from the database that dont exist,DbModel100,17.65,17.0,100,1,1
+lazy read missing,fetch 100x from the database that dont exist,NdbModel100,18.03,18.0,100,1,1
+lazy read missing,fetch 100x from the database that dont exist,DbExpando100,17.54,17.0,100,1,1
+lazy read missing,fetch 100x from the database that dont exist,NdbExpando100,17.74,17.0,100,1,1
+create,create a single row,DbModel10,3.97,3.0,10,1,1
+create,create a single row,NdbModel10,2.97,2.0,10,1,1
+create,create a single row,DbExpando10,2.8,2.0,10,1,1
+create,create a single row,NdbExpando10,3.07,3.0,10,1,1
+create,create a single row,DbModel100,10.95,10.0,100,1,1
+create,create a single row,NdbModel100,11.8,11.0,100,1,1
+create,create a single row,DbExpando100,14.01,14.0,100,1,1
+create,create a single row,NdbExpando100,12.87,12.0,100,1,1
+create,create 20x rows at at time,DbModel10,46.59,46.0,10,1,1
+create,create 20x rows at at time,NdbModel10,53.86,53.0,10,1,1
+create,create 20x rows at at time,DbExpando10,58.67,58.0,10,1,1
+create,create 20x rows at at time,NdbExpando10,57.08,57.0,10,1,1
+create,create 20x rows at at time,DbModel100,282.64,282.0,100,1,1
+create,create 20x rows at at time,NdbModel100,248.55,248.0,100,1,1
+create,create 20x rows at at time,DbExpando100,297.96,297.0,100,1,1
+create,create 20x rows at at time,NdbExpando100,300.58,300.0,100,1,1
+update,update a single row,DbModel10,2.93,2.0,10,1,1
+update,update a single row,NdbModel10,3.75,3.0,10,1,1
+update,update a single row,DbExpando10,2.75,2.0,10,1,1
+update,update a single row,NdbExpando10,3.63,3.0,10,1,1
+update,update a single row,DbModel100,12.38,12.0,100,1,1
+update,update a single row,NdbModel100,13.17,13.0,100,1,1
+update,update a single row,DbExpando100,15.57,15.0,100,1,1
+update,update a single row,NdbExpando100,16.08,16.0,100,1,1
+update,update 20x rows at a time,DbModel10,67.23,67.0,10,1,1
+update,update 20x rows at a time,NdbModel10,61.45,61.0,10,1,1
+update,update 20x rows at a time,DbExpando10,55.16,55.0,10,1,1
+update,update 20x rows at a time,NdbExpando10,59.42,59.0,10,1,1
+update,update 20x rows at a time,DbModel100,232.06,232.0,100,1,1
+update,update 20x rows at a time,NdbModel100,318.08,318.0,100,1,1
+update,update 20x rows at a time,DbExpando100,332.94,332.0,100,1,1
+update,update 20x rows at a time,NdbExpando100,320.22,320.0,100,1,1
+update,update 100x rows at a time,DbModel10,2.47,2.0,10,1,1
+update,update 100x rows at a time,NdbModel10,3.41,3.0,10,1,1
+update,update 100x rows at a time,DbExpando10,2.64,2.0,10,1,1
+update,update 100x rows at a time,NdbExpando10,3.22,3.0,10,1,1
+update,update 100x rows at a time,DbModel100,14.09,14.0,100,1,1
+update,update 100x rows at a time,NdbModel100,15.54,15.0,100,1,1
+update,update 100x rows at a time,DbExpando100,16.87,16.0,100,1,1
+update,update 100x rows at a time,NdbExpando100,13.17,13.0,100,1,1
+delete,delete a single row,DbModel10,1.39,1.0,10,1,1
+delete,delete a single row,NdbModel10,2.57,2.0,10,1,1
+delete,delete a single row,DbExpando10,1.53,1.0,10,1,1
+delete,delete a single row,NdbExpando10,3.96,3.0,10,1,1
+delete,delete a single row,DbModel100,2.31,2.0,100,1,1
+delete,delete a single row,NdbModel100,2.57,2.0,100,1,1
+delete,delete a single row,DbExpando100,2.87,2.0,100,1,1
+delete,delete a single row,NdbExpando100,3.39,3.0,100,1,1
+delete,delete 20x rows at a time,DbModel10,25.7,25.0,10,1,1
+delete,delete 20x rows at a time,NdbModel10,32.06,32.0,10,1,1
+delete,delete 20x rows at a time,DbExpando10,27.2,27.0,10,1,1
+delete,delete 20x rows at a time,NdbExpando10,27.44,27.0,10,1,1
+delete,delete 20x rows at a time,DbModel100,32.94,32.0,100,1,1
+delete,delete 20x rows at a time,NdbModel100,28.75,28.0,100,1,1
+delete,delete 20x rows at a time,DbExpando100,24.96,24.0,100,1,1
+delete,delete 20x rows at a time,NdbExpando100,28.83,28.0,100,1,1
+delete,delete 100x rows at a time,DbModel10,2.0,2.0,10,1,1
+delete,delete 100x rows at a time,NdbModel10,2.98,2.0,10,1,1
+delete,delete 100x rows at a time,DbExpando10,1.31,1.0,10,1,1
+delete,delete 100x rows at a time,NdbExpando10,4.63,4.0,10,1,1
+delete,delete 100x rows at a time,DbModel100,2.82,2.0,100,1,1
+delete,delete 100x rows at a time,NdbModel100,3.32,3.0,100,1,1
+delete,delete 100x rows at a time,DbExpando100,2.47,2.0,100,1,1
+delete,delete 100x rows at a time,NdbExpando100,3.2,3.0,100,1,1

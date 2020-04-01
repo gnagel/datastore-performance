@@ -7,7 +7,7 @@ from google.appengine.datastore import datastore_stub_index
 from google.appengine.ext import testbed
 
 from datastore_performance import benchmark_serialization
-from datastore_performance.constants import DB_MODEL_CLASSES
+from datastore_performance.constants import model_classes
 
 _testbed = None
 _index_yaml_path = None
@@ -40,7 +40,8 @@ def tearDownModule():
 
 class TestBenchmarkSerializationModels(unittest.TestCase):
     def test_benchmark_serialization_models(self):
-        output = benchmark_serialization.benchmark_serialization_models()
-        count_models = len(DB_MODEL_CLASSES)
+        klasses = model_classes()[:2]
+        output = benchmark_serialization.benchmark_serialization_models(klasses)
+        count_models = len(klasses)
         count_test_groups = len([x for x in benchmark_serialization.SerializationTestGroups])
         self.assertEqual(len(output), count_models * count_test_groups)

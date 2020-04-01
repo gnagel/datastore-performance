@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 
 import csv
+import math
 import time
 import uuid
 from StringIO import StringIO
@@ -48,8 +49,8 @@ def create_result(model_class, test_group, seconds, iterations):
         test_group=test_group.value,
         row_count=1,
         iteration_count=SERIALIZATION_ITERATIONS,
-        total_milli_seconds=seconds,
-        avg_milli_seconds=seconds / float(iterations),
+        total_milli_seconds=math.floor(seconds * 1000),
+        avg_milli_seconds=(seconds * 1000 / float(iterations)),
     )
 
 
@@ -114,8 +115,8 @@ def format_csv(results):
     for result in results:
         klass = result.klass
         properties_count = result.properties_count
-        test_name = result.test_group.split(':')[0]
-        test_description = ':'.join(result.test_group.split(':')[1:])
+        test_name = result.test_group.split(' : ')[0]
+        test_description = ' : '.join(result.test_group.split(' : ')[1:])
         row_count = result.row_count
         iteration_count = result.iteration_count
         total_milli_seconds = result.total_milli_seconds
@@ -134,7 +135,7 @@ def format_csv(results):
         rows.append(row)
 
     headers = [
-        'test_name',
+        'test_group',
         'test_description',
         'klass',
         'properties_count',
@@ -147,7 +148,7 @@ def format_csv(results):
 
 
 def csv2string(headers, rows):
-    string_buffer = StringIO.StringIO()
+    string_buffer = StringIO()
     writer = csv.writer(string_buffer)
     writer.writerow(headers)
     writer.writerows(rows)

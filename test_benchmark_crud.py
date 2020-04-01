@@ -43,3 +43,24 @@ class TestBenchmarkCrud(unittest.TestCase):
         count_models = len(DB_MODEL_CLASSES)
         count_test_groups = len([x for x in benchmark_crud.CrudTestGroups])
         self.assertEqual(len(output), count_models * count_test_groups)
+
+        # _benchmark_READ_SINGLE_ROW,
+        # _benchmark_READ_MULTI_ROW,
+        # _benchmark_READ_BULK,
+        # _benchmark_READ_MISSING_BULK,
+        # _benchmark_ASYNC_READ_SINGLE_ROW,
+        # _benchmark_ASYNC_READ_MULTI_ROW,
+        # _benchmark_ASYNC_READ_BULK,
+        # _benchmark_ASYNC_READ_MISSING_BULK,
+        # _benchmark_LAZY_READ_SINGLE_ROW,
+        # _benchmark_LAZY_READ_MULTI_ROW,
+        # _benchmark_LAZY_READ_BULK,
+        # _benchmark_LAZY_READ_MISSING_BULK,
+        # _benchmark_CREATE_SINGLE_ROW,
+        # _benchmark_CREATE_MULTI_ROW,
+        # _benchmark_UPDATE_SINGLE_ROW,
+        # _benchmark_UPDATE_MULTI_ROW,
+        # _benchmark_UPDATE_BULK_ROW,
+        # _benchmark_DELETE_SINGLE_ROW,
+        # _benchmark_DELETE_MULTI_ROW,
+        # _benchmark_DELETE_BULK_ROW,

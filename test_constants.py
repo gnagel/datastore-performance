@@ -1,16 +1,15 @@
 from __future__ import absolute_import
-import unittest
 
 import os.path
 import unittest
 
-from datastore_performance.benchmark_serialization import _benchmark_MODEL_TO_PROTOBUF_STRING
-from datastore_performance.models import Model10
 from google.appengine.datastore import datastore_stub_index
 from google.appengine.ext import testbed
 
-from datastore_performance import benchmark_crud, constants
-from datastore_performance.constants import DB_MODEL_CLASSES
+from datastore_performance import constants
+from datastore_performance.benchmark_crud import _benchmark_READ_SINGLE_ROW
+from datastore_performance.benchmark_serialization import _benchmark_MODEL_TO_PROTOBUF_STRING
+from datastore_performance.models import Model10
 
 _testbed = None
 _index_yaml_path = None
@@ -41,7 +40,14 @@ def tearDownModule():
 
 
 class TestFormatCsv(unittest.TestCase):
-    def test_format_csv_1x(self):
-        result = _benchmark_MODEL_TO_PROTOBUF_STRING(Model10)
+    def test_format_csv_1x_MODEL_TO_PROTOBUF_STRING(self):
+        test_group, delta, iterations = _benchmark_MODEL_TO_PROTOBUF_STRING(Model10)
+        result = constants.create_result(Model10, test_group, delta, iterations)
         csv_string = constants.format_csv([result])
-        self.assertEqual(len(csv_string.split("\n")), 2)
+        self.assertEqual(len(csv_string.split("\n")), 2, csv_string)
+
+    def test_format_csv_1x_READ_SINGLE_ROW(self):
+        test_group, delta, iterations = _benchmark_READ_SINGLE_ROW(Model10)
+        result = constants.create_result(Model10, test_group, delta, iterations)
+        csv_string = constants.format_csv([result])
+        self.assertEqual(len(csv_string.split("\n")), 2, csv_string)

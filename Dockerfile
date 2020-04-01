@@ -2,7 +2,7 @@ FROM python:2.7-stretch
 
 ENV CLOUDSDK_CORE_DISABLE_PROMPTS=1 \
     DEBIAN_FRONTEND=noninteractive \
-    PYTHONPATH=.:/root/google-cloud-sdk/platform/google_appengine \
+    PYTHONPATH=.:/root/google-cloud-sdk/lib/third_party/:/root/google-cloud-sdk/platform/google_appengine \
     PATH=${PATH}:/root/google-cloud-sdk/bin
 
 RUN curl https://sdk.cloud.google.com | bash && \

@@ -54,7 +54,35 @@ Google App Engine's Python original datastore library called "db" has very slow 
     ```
 
 
-## Benchmark Testing
+## Local Benchmark Testing
+
+1. Setup the app
+    ```shell script
+     docker-compose down
+     docker-compose build
+     docker-compose up -d 
+    ```
+
+1. Run the serialization benchmarks
+    ```shell script
+     docker-compose exec app python manage.py benchmark-serialization
+     docker-compose exec app python manage.py benchmark-crud 
+    ```
+
+1. Run the CRUD benchmarks against a mock datastore / local database
+    ```shell script
+     docker-compose exec app python manage.py benchmark-crud 
+    ```
+
+1. Run the CRUD benchmarks against a mock datastore / local database
+    ```shell script
+    docker-compose exec app gcloud auth login
+    docker-compose exec app gcloud config set project [YOUR PROJECT ID]
+    docker-compose exec app bash -c 'APPLICATION_ID=bluecore-qa python manage.py benchmark-crud'
+
+    ```
+
+
 
 1. Create a set of instances that get used for the test. This needs to be done only once:
 

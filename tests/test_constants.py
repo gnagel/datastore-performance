@@ -26,8 +26,8 @@ def setUpModule():
     _testbed.init_app_identity_stub()
     _testbed.init_urlfetch_stub()
     _testbed.init_blobstore_stub()
-    _testbed.init_taskqueue_stub(enable=True, root_path='.')
-    _index_yaml_path = os.path.join(".")
+    _testbed.init_taskqueue_stub(enable=True, root_path='..')
+    _index_yaml_path = os.path.join("..")
     _index_updater = datastore_stub_index.IndexYamlUpdater(_index_yaml_path)
 
 

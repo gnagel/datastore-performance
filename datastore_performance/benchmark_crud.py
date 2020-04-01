@@ -81,8 +81,8 @@ def benchmark_crud_models(klasses=None):
     ]
     for test in tests:
         for klass in klasses:
-            test_group, delta, iterations = test(klass)
-            results.append(create_result(klass, test_group, delta, iterations))
+            test_group, delta, iterations, row_count = test(klass)
+            results.append(create_result(klass, test_group, delta, iterations, row_count))
 
     return results
 
@@ -93,7 +93,7 @@ def _benchmark_READ_SINGLE_ROW(model_class):
             model_class.get([key])
 
         seconds = benchmark_fn(fn, CRUD_ITERATIONS)
-    return CrudTestGroups.READ_SINGLE_ROW, seconds, CRUD_ITERATIONS
+    return CrudTestGroups.READ_SINGLE_ROW, seconds, CRUD_ITERATIONS, 1
 
 
 def _benchmark_READ_MULTI_ROW(model_class):
@@ -102,7 +102,7 @@ def _benchmark_READ_MULTI_ROW(model_class):
             model_class.get(keys)
 
         seconds = benchmark_fn(fn, CRUD_ITERATIONS)
-    return CrudTestGroups.READ_MULTI_ROW, seconds, CRUD_ITERATIONS
+    return CrudTestGroups.READ_MULTI_ROW, seconds, CRUD_ITERATIONS, NUM_INSTANCES_TO_DESERIALIZE
 
 
 def _benchmark_READ_BULK(model_class):
@@ -111,7 +111,7 @@ def _benchmark_READ_BULK(model_class):
             model_class.get(keys)
 
         seconds = benchmark_fn(fn, CRUD_ITERATIONS)
-    return CrudTestGroups.READ_BULK, seconds, CRUD_ITERATIONS
+    return CrudTestGroups.READ_BULK, seconds, CRUD_ITERATIONS, INSTANCES_TO_CREATE
 
 
 def _benchmark_READ_MISSING_BULK(model_class):
@@ -125,7 +125,7 @@ def _benchmark_READ_MISSING_BULK(model_class):
             model_class.get(keys)
 
         seconds = benchmark_fn(fn, CRUD_ITERATIONS)
-    return CrudTestGroups.READ_MISSING_BULK, seconds, CRUD_ITERATIONS
+    return CrudTestGroups.READ_MISSING_BULK, seconds, CRUD_ITERATIONS, INSTANCES_TO_CREATE
 
 
 def _benchmark_ASYNC_READ_SINGLE_ROW(model_class):
@@ -138,7 +138,7 @@ def _benchmark_ASYNC_READ_SINGLE_ROW(model_class):
             rpc.get_result()
 
         seconds = benchmark_fn(fn, CRUD_ITERATIONS)
-    return CrudTestGroups.ASYNC_READ_SINGLE_ROW, seconds, CRUD_ITERATIONS
+    return CrudTestGroups.ASYNC_READ_SINGLE_ROW, seconds, CRUD_ITERATIONS, 1
 
 
 def _benchmark_ASYNC_READ_MULTI_ROW(model_class):
@@ -151,7 +151,7 @@ def _benchmark_ASYNC_READ_MULTI_ROW(model_class):
             rpc.get_result()
 
         seconds = benchmark_fn(fn, CRUD_ITERATIONS)
-    return CrudTestGroups.ASYNC_READ_MULTI_ROW, seconds, CRUD_ITERATIONS
+    return CrudTestGroups.ASYNC_READ_MULTI_ROW, seconds, CRUD_ITERATIONS, NUM_INSTANCES_TO_DESERIALIZE
 
 
 def _benchmark_ASYNC_READ_BULK(model_class):
@@ -164,7 +164,7 @@ def _benchmark_ASYNC_READ_BULK(model_class):
             rpc.get_result()
 
         seconds = benchmark_fn(fn, CRUD_ITERATIONS)
-    return CrudTestGroups.ASYNC_READ_BULK, seconds, CRUD_ITERATIONS
+    return CrudTestGroups.ASYNC_READ_BULK, seconds, CRUD_ITERATIONS, INSTANCES_TO_CREATE
 
 
 def _benchmark_ASYNC_READ_MISSING_BULK(model_class):
@@ -182,7 +182,7 @@ def _benchmark_ASYNC_READ_MISSING_BULK(model_class):
             rpc.get_result()
 
         seconds = benchmark_fn(fn, CRUD_ITERATIONS)
-    return CrudTestGroups.ASYNC_READ_MISSING_BULK, seconds, CRUD_ITERATIONS
+    return CrudTestGroups.ASYNC_READ_MISSING_BULK, seconds, CRUD_ITERATIONS, INSTANCES_TO_CREATE
 
 
 def _benchmark_LAZY_READ_SINGLE_ROW(model_class):
@@ -194,7 +194,7 @@ def _benchmark_LAZY_READ_SINGLE_ROW(model_class):
             datastore_lazy.get([key])
 
         seconds = benchmark_fn(fn, CRUD_ITERATIONS)
-    return CrudTestGroups.LAZY_READ_SINGLE_ROW, seconds, CRUD_ITERATIONS
+    return CrudTestGroups.LAZY_READ_SINGLE_ROW, seconds, CRUD_ITERATIONS, 1
 
 
 def _benchmark_LAZY_READ_MULTI_ROW(model_class):
@@ -206,7 +206,7 @@ def _benchmark_LAZY_READ_MULTI_ROW(model_class):
             datastore_lazy.get(keys)
 
         seconds = benchmark_fn(fn, CRUD_ITERATIONS)
-    return CrudTestGroups.LAZY_READ_MULTI_ROW, seconds, CRUD_ITERATIONS
+    return CrudTestGroups.LAZY_READ_MULTI_ROW, seconds, CRUD_ITERATIONS, NUM_INSTANCES_TO_DESERIALIZE
 
 
 def _benchmark_LAZY_READ_BULK(model_class):
@@ -218,7 +218,7 @@ def _benchmark_LAZY_READ_BULK(model_class):
             datastore_lazy.get(keys)
 
         seconds = benchmark_fn(fn, CRUD_ITERATIONS)
-    return CrudTestGroups.LAZY_READ_BULK, seconds, CRUD_ITERATIONS
+    return CrudTestGroups.LAZY_READ_BULK, seconds, CRUD_ITERATIONS, INSTANCES_TO_CREATE
 
 
 def _benchmark_LAZY_READ_MISSING_BULK(model_class):
@@ -235,7 +235,7 @@ def _benchmark_LAZY_READ_MISSING_BULK(model_class):
             datastore_lazy.get(keys)
 
         seconds = benchmark_fn(fn, CRUD_ITERATIONS)
-    return CrudTestGroups.LAZY_READ_MISSING_BULK, seconds, CRUD_ITERATIONS
+    return CrudTestGroups.LAZY_READ_MISSING_BULK, seconds, CRUD_ITERATIONS, INSTANCES_TO_CREATE
 
 
 def _benchmark_CREATE_SINGLE_ROW(model_class):
@@ -253,7 +253,7 @@ def _benchmark_CREATE_SINGLE_ROW(model_class):
     # Cleanup after the test
     model_class.delete(rows)
 
-    return CrudTestGroups.CREATE_SINGLE_ROW, seconds, CRUD_ITERATIONS
+    return CrudTestGroups.CREATE_SINGLE_ROW, seconds, CRUD_ITERATIONS, 1
 
 
 def _benchmark_CREATE_MULTI_ROW(model_class):
@@ -274,7 +274,7 @@ def _benchmark_CREATE_MULTI_ROW(model_class):
     # Cleanup after the test
     model_class.delete(rows)
 
-    return CrudTestGroups.CREATE_MULTI_ROW, seconds, CRUD_ITERATIONS
+    return CrudTestGroups.CREATE_MULTI_ROW, seconds, CRUD_ITERATIONS, NUM_INSTANCES_TO_DESERIALIZE
 
 
 def _benchmark_CREATE_BULK_ROW(model_class):
@@ -295,7 +295,7 @@ def _benchmark_CREATE_BULK_ROW(model_class):
     # Cleanup after the test
     model_class.delete(rows)
 
-    return CrudTestGroups.CREATE_BULK_ROW, seconds, CRUD_ITERATIONS
+    return CrudTestGroups.CREATE_BULK_ROW, seconds, CRUD_ITERATIONS, CRUD_ITERATIONS
 
 
 def _benchmark_UPDATE_SINGLE_ROW(model_class):
@@ -306,7 +306,7 @@ def _benchmark_UPDATE_SINGLE_ROW(model_class):
             model_class.put([row])
 
         seconds = benchmark_fn(fn, CRUD_ITERATIONS)
-    return CrudTestGroups.UPDATE_SINGLE_ROW, seconds, CRUD_ITERATIONS
+    return CrudTestGroups.UPDATE_SINGLE_ROW, seconds, CRUD_ITERATIONS, 1
 
 
 def _benchmark_UPDATE_MULTI_ROW(model_class):
@@ -318,7 +318,7 @@ def _benchmark_UPDATE_MULTI_ROW(model_class):
             model_class.put(rows)
 
         seconds = benchmark_fn(fn, CRUD_ITERATIONS)
-    return CrudTestGroups.UPDATE_MULTI_ROW, seconds, CRUD_ITERATIONS
+    return CrudTestGroups.UPDATE_MULTI_ROW, seconds, CRUD_ITERATIONS, NUM_INSTANCES_TO_DESERIALIZE
 
 
 def _benchmark_UPDATE_BULK_ROW(model_class):
@@ -330,7 +330,7 @@ def _benchmark_UPDATE_BULK_ROW(model_class):
             model_class.put(rows)
 
         seconds = benchmark_fn(fn, CRUD_ITERATIONS)
-    return CrudTestGroups.UPDATE_BULK_ROW, seconds, CRUD_ITERATIONS
+    return CrudTestGroups.UPDATE_BULK_ROW, seconds, CRUD_ITERATIONS, CRUD_ITERATIONS
 
 
 def _benchmark_DELETE_SINGLE_ROW(model_class):
@@ -340,7 +340,7 @@ def _benchmark_DELETE_SINGLE_ROW(model_class):
             model_class.delete([row])
 
         seconds = benchmark_fn(fn, CRUD_ITERATIONS)
-    return CrudTestGroups.DELETE_SINGLE_ROW, seconds, CRUD_ITERATIONS
+    return CrudTestGroups.DELETE_SINGLE_ROW, seconds, CRUD_ITERATIONS, CRUD_ITERATIONS
 
 
 def _benchmark_DELETE_MULTI_ROW(model_class):
@@ -350,7 +350,7 @@ def _benchmark_DELETE_MULTI_ROW(model_class):
             model_class.delete(rows_slice)
 
         seconds = benchmark_fn(fn, CRUD_ITERATIONS)
-    return CrudTestGroups.DELETE_MULTI_ROW, seconds, CRUD_ITERATIONS
+    return CrudTestGroups.DELETE_MULTI_ROW, seconds, CRUD_ITERATIONS, NUM_INSTANCES_TO_DESERIALIZE
 
 
 def _benchmark_DELETE_BULK_ROW(model_class):
@@ -360,4 +360,4 @@ def _benchmark_DELETE_BULK_ROW(model_class):
             model_class.delete(rows_slice)
 
         seconds = benchmark_fn(fn, CRUD_ITERATIONS)
-    return CrudTestGroups.DELETE_BULK_ROW, seconds, CRUD_ITERATIONS
+    return CrudTestGroups.DELETE_BULK_ROW, seconds, CRUD_ITERATIONS, CRUD_ITERATIONS

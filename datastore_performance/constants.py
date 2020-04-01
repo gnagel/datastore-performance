@@ -44,13 +44,13 @@ def model_classes():
     return model_classes
 
 
-def create_result(model_class, test_group, seconds, iterations):
+def create_result(model_class, test_group, seconds, iterations, row_count):
     if seconds is None:
         return TestRunResult(
             klass=model_class.__name__,
             properties_count=len(model_class._properties.keys()),
             test_group=test_group.value,
-            row_count='N/A',
+            row_count='None',
             iteration_count=0,
             total_milli_seconds='',
             avg_milli_seconds='',
@@ -62,7 +62,7 @@ def create_result(model_class, test_group, seconds, iterations):
         klass=model_class.__name__,
         properties_count=len(model_class._properties.keys()),
         test_group=test_group.value,
-        row_count=1,
+        row_count=row_count,
         iteration_count=iterations,
         total_milli_seconds=math.floor(seconds * 1000),
         avg_milli_seconds=avg_milli_seconds,

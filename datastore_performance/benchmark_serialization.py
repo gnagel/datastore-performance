@@ -13,13 +13,13 @@ SERIALIZATION_ITERATIONS = 1000
 
 @enum.unique
 class SerializationTestGroups(enum.Enum):
-    MODEL_TO_PROTOBUF_STRING = 'Serialize the Model into binary: model --> ... --> ... --> Protobuf binary (3-4x steps)'
+    MODEL_TO_PROTOBUF_STRING = 'Serialize the Model into binary: Model --> ... --> Protobuf binary (3-4x steps)'
     ENTITY_TO_PROTOBUF_STRING = 'Serialize the db.Entity into binary: db.Entity --> ... --> Protobuf binary (2-3x steps)'
     ENTITY_PROTO_TO_PROTOBUF_STRING = 'Serialize the entity_pb.Entity (proto) into binary: entity_pb.EntityProto --> Protobuf binary (1x step)'
 
-    PROTOBUF_STRING_TO_MODEL = 'Deserialize binary to Model: Protobuf binary --> ... --> Model (3-4x steps)'
-    PROTOBUF_STRING_TO_ENTITY = 'Deserialize binary to db.Entity: Protobuf binary --> ... --> db.Entity (2-3x steps)'
-    PROTOBUF_STRING_TO_ENTITY_PROTO = 'Deserialize binary to entity_pb.Entity (proto): Protobuf binary --> entity_pb.EntityProto (1x step)'
+    PROTOBUF_STRING_TO_MODEL = 'Parse binary to Model: Protobuf binary --> ... --> Model (3-4x steps)'
+    PROTOBUF_STRING_TO_ENTITY = 'Parse binary to db.Entity: Protobuf binary --> ... --> db.Entity (2-3x steps)'
+    PROTOBUF_STRING_TO_ENTITY_PROTO = 'Parse binary to entity_pb.Entity (proto): Protobuf binary --> entity_pb.EntityProto (1x step)'
     # PROTOBUF_STRING_TO_ENTITY_PROTO_WITH_REUSE = 'Deserialize: Protobuf binary --> entity_pb.EntityProto with protobuf reuse'
 
     SINGLE_PROPERTY_ACCESS_TIMES_PROTOBUF_TO_MODEL = 'Deserialize and read 1x property from the model: deserialize into Model w/ reading properties from the model'
@@ -74,8 +74,8 @@ def benchmark_serialization_models(klasses=None):
     for test in tests:
         for klass in klasses:
             # Execute the test on this model, skipping any tests that are not supported
-            test_group, delta, iterations = test(klass)
-            results.append(create_result(klass, test_group, delta, iterations))
+            test_group, delta, iterations, row_count = test(klass)
+            results.append(create_result(klass, test_group, delta, iterations, row_count))
     return results
 
 
@@ -86,7 +86,7 @@ def _benchmark_MODEL_TO_PROTOBUF_STRING(model_class):
             entity_proto.SerializeToString()
 
         seconds = benchmark_fn(fn, SERIALIZATION_ITERATIONS)
-        return SerializationTestGroups.MODEL_TO_PROTOBUF_STRING, seconds, SERIALIZATION_ITERATIONS
+        return SerializationTestGroups.MODEL_TO_PROTOBUF_STRING, seconds, SERIALIZATION_ITERATIONS, 1
 
 
 def _benchmark_ENTITY_TO_PROTOBUF_STRING(model_class):
@@ -94,14 +94,14 @@ def _benchmark_ENTITY_TO_PROTOBUF_STRING(model_class):
         try:
             entity = row.convert_to_entity()
         except NotImplementedError:
-            return SerializationTestGroups.ENTITY_TO_PROTOBUF_STRING, None, None
+            return SerializationTestGroups.ENTITY_TO_PROTOBUF_STRING, None, None, None
 
         def fn():
             entity_proto = entity.ToPb()
             entity_proto.SerializeToString()
 
         seconds = benchmark_fn(fn, SERIALIZATION_ITERATIONS)
-        return SerializationTestGroups.ENTITY_TO_PROTOBUF_STRING, seconds, SERIALIZATION_ITERATIONS
+        return SerializationTestGroups.ENTITY_TO_PROTOBUF_STRING, seconds, SERIALIZATION_ITERATIONS,1
 
 
 def _benchmark_ENTITY_PROTO_TO_PROTOBUF_STRING(model_class):
@@ -112,7 +112,7 @@ def _benchmark_ENTITY_PROTO_TO_PROTOBUF_STRING(model_class):
             entity_proto.SerializeToString()
 
         seconds = benchmark_fn(fn, SERIALIZATION_ITERATIONS)
-        return SerializationTestGroups.ENTITY_PROTO_TO_PROTOBUF_STRING, seconds, SERIALIZATION_ITERATIONS
+        return SerializationTestGroups.ENTITY_PROTO_TO_PROTOBUF_STRING, seconds, SERIALIZATION_ITERATIONS,1
 
 
 def _benchmark_PROTOBUF_STRING_TO_MODEL(model_class):
@@ -126,7 +126,7 @@ def _benchmark_PROTOBUF_STRING_TO_MODEL(model_class):
             model_class.convert_from_binary(serialized)
 
         seconds = benchmark_fn(fn, SERIALIZATION_ITERATIONS)
-        return SerializationTestGroups.PROTOBUF_STRING_TO_MODEL, seconds, SERIALIZATION_ITERATIONS
+        return SerializationTestGroups.PROTOBUF_STRING_TO_MODEL, seconds, SERIALIZATION_ITERATIONS,1
 
 
 def _benchmark_PROTOBUF_STRING_TO_ENTITY(model_class):
@@ -139,7 +139,7 @@ def _benchmark_PROTOBUF_STRING_TO_ENTITY(model_class):
             datastore.Entity.FromPb(entity_proto)
 
         seconds = benchmark_fn(fn, SERIALIZATION_ITERATIONS)
-        return SerializationTestGroups.PROTOBUF_STRING_TO_ENTITY, seconds, SERIALIZATION_ITERATIONS
+        return SerializationTestGroups.PROTOBUF_STRING_TO_ENTITY, seconds, SERIALIZATION_ITERATIONS,1
 
 
 def _benchmark_PROTOBUF_STRING_TO_ENTITY_PROTO(model_class):
@@ -152,7 +152,7 @@ def _benchmark_PROTOBUF_STRING_TO_ENTITY_PROTO(model_class):
             datastore.Entity.FromPb(entity_proto)
 
         seconds = benchmark_fn(fn, SERIALIZATION_ITERATIONS)
-        return SerializationTestGroups.PROTOBUF_STRING_TO_ENTITY_PROTO, seconds, SERIALIZATION_ITERATIONS
+        return SerializationTestGroups.PROTOBUF_STRING_TO_ENTITY_PROTO, seconds, SERIALIZATION_ITERATIONS,1
 
 
 # def _benchmark_PROTOBUF_STRING_TO_ENTITY_PROTO_WITH_REUSE(model_class):
@@ -165,7 +165,7 @@ def _benchmark_PROTOBUF_STRING_TO_ENTITY_PROTO(model_class):
 #             entity_proto.MergeFromString(serialized)
 #
 #         seconds = benchmark_fn(fn, SERIALIZATION_ITERATIONS)
-#         return SerializationTestGroups.PROTOBUF_STRING_TO_ENTITY_PROTO_WITH_REUSE, seconds, SERIALIZATION_ITERATIONS
+#         return SerializationTestGroups.PROTOBUF_STRING_TO_ENTITY_PROTO_WITH_REUSE, seconds, SERIALIZATION_ITERATIONS,1
 
 
 def _benchmark_SINGLE_PROPERTY_ACCESS_TIMES_PROTOBUF_TO_MODEL(model_class):
@@ -182,7 +182,7 @@ def _benchmark_SINGLE_PROPERTY_ACCESS_TIMES_PROTOBUF_TO_MODEL(model_class):
             len(deserialized.prop_0)
 
         seconds = benchmark_fn(fn, SERIALIZATION_ITERATIONS)
-        return SerializationTestGroups.SINGLE_PROPERTY_ACCESS_TIMES_PROTOBUF_TO_MODEL, seconds, SERIALIZATION_ITERATIONS
+        return SerializationTestGroups.SINGLE_PROPERTY_ACCESS_TIMES_PROTOBUF_TO_MODEL, seconds, SERIALIZATION_ITERATIONS,1
 
 
 def _benchmark_MULTI_PROPERTY_ACCESS_TIMES_PROTOBUF_TO_MODEL(model_class):
@@ -207,7 +207,7 @@ def _benchmark_MULTI_PROPERTY_ACCESS_TIMES_PROTOBUF_TO_MODEL(model_class):
             len(deserialized.prop_9)
 
         seconds = benchmark_fn(fn, SERIALIZATION_ITERATIONS)
-        return SerializationTestGroups.MULTI_PROPERTY_ACCESS_TIMES_PROTOBUF_TO_MODEL, seconds, SERIALIZATION_ITERATIONS
+        return SerializationTestGroups.MULTI_PROPERTY_ACCESS_TIMES_PROTOBUF_TO_MODEL, seconds, SERIALIZATION_ITERATIONS,1
 
 
 def _benchmark_SINGLE_LAZY_PROPERTY_ACCESS_TIMES_PROTOBUF_TO_MODEL(model_class):
@@ -221,7 +221,7 @@ def _benchmark_SINGLE_LAZY_PROPERTY_ACCESS_TIMES_PROTOBUF_TO_MODEL(model_class):
             len(deserialized.prop_0)
 
         seconds = benchmark_fn(fn, SERIALIZATION_ITERATIONS)
-        return SerializationTestGroups.SINGLE_LAZY_PROPERTY_ACCESS_TIMES_PROTOBUF_TO_MODEL, seconds, SERIALIZATION_ITERATIONS
+        return SerializationTestGroups.SINGLE_LAZY_PROPERTY_ACCESS_TIMES_PROTOBUF_TO_MODEL, seconds, SERIALIZATION_ITERATIONS,1
 
 
 def _benchmark_MULTI_LAZY_PROPERTY_ACCESS_TIMES_PROTOBUF_TO_MODEL(model_class):
@@ -244,7 +244,7 @@ def _benchmark_MULTI_LAZY_PROPERTY_ACCESS_TIMES_PROTOBUF_TO_MODEL(model_class):
             len(deserialized.prop_9)
 
         seconds = benchmark_fn(fn, SERIALIZATION_ITERATIONS)
-        return SerializationTestGroups.MULTI_LAZY_PROPERTY_ACCESS_TIMES_PROTOBUF_TO_MODEL, seconds, SERIALIZATION_ITERATIONS
+        return SerializationTestGroups.MULTI_LAZY_PROPERTY_ACCESS_TIMES_PROTOBUF_TO_MODEL, seconds, SERIALIZATION_ITERATIONS,1
 
 # def _benchmark_PROTOBUF_PROPERTY_SIZE(model_class):
 #     with create_row(model_class) as (row, key):
@@ -256,4 +256,4 @@ def _benchmark_MULTI_LAZY_PROPERTY_ACCESS_TIMES_PROTOBUF_TO_MODEL(model_class):
 #             entity_proto.property_size()
 #
 #         seconds = benchmark_fn(fn, SERIALIZATION_ITERATIONS)
-#         return SerializationTestGroups.PROTOBUF_PROPERTY_SIZE, seconds, SERIALIZATION_ITERATIONS
+#         return SerializationTestGroups.PROTOBUF_PROPERTY_SIZE, seconds, SERIALIZATION_ITERATIONS,1

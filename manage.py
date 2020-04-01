@@ -10,7 +10,7 @@ from jinja2 import Template
 from datastore_performance.benchmark_crud import benchmark_crud_models
 from datastore_performance.benchmark_serialization import benchmark_serialization_models
 from datastore_performance.constants import format_csv
-from test_benchmark_crud import setUpModule, tearDownModule
+from tests.test_benchmark_crud import setUpModule, tearDownModule
 
 
 @click.group()
@@ -46,8 +46,10 @@ def benchmark_crud():
     application_id = os.environ.get('APPLICATION_ID', None)
     # Initialize either the mock stubs, or a remote connection to app engine
     if not application_id:
+        click.echo('Using mock app-engine APIs')
         setUpModule()
     else:
+        click.echo('Connection to App Engine: {}'.format(application_id))
         _boot_app_engine(application_id)
 
     results = benchmark_crud_models()

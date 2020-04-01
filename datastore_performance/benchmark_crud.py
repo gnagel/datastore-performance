@@ -16,33 +16,34 @@ CRUD_ITERATIONS = 10
 
 @enum.unique
 class CrudTestGroups(enum.Enum):
-    READ_SINGLE_ROW = 'read: fetch a single row'
-    READ_MULTI_ROW = 'read: fetch {}x rows'.format(NUM_INSTANCES_TO_DESERIALIZE)
-    READ_BULK = 'read: fetch {}x rows from the database at at time'.format(INSTANCES_TO_CREATE)
-    READ_MISSING_BULK = 'read missing: fetch {}x from the database that dont exist'.format(INSTANCES_TO_CREATE)
+    READ_SINGLE_ROW = 'Read Model: Fetch a single row'
+    READ_MULTI_ROW = 'Read Model: Fetch {}x rows'.format(NUM_INSTANCES_TO_DESERIALIZE)
+    READ_BULK = 'Read Model: Fetch {}x rows from the database at at time'.format(INSTANCES_TO_CREATE)
+    READ_MISSING_BULK = 'Read Missing Model: Fetch {}x from the database that dont exist'.format(INSTANCES_TO_CREATE)
 
-    ASYNC_READ_SINGLE_ROW = 'async read: fetch a single row'
-    ASYNC_READ_MULTI_ROW = 'async read: fetch {}x rows'.format(NUM_INSTANCES_TO_DESERIALIZE)
-    ASYNC_READ_BULK = 'async read: fetch {}x rows from the database at at time'.format(INSTANCES_TO_CREATE)
-    ASYNC_READ_MISSING_BULK = 'async read missing: fetch {}x from the database that dont exist'.format(
+    ASYNC_READ_SINGLE_ROW = 'Async Read Model: Fetch a single row'
+    ASYNC_READ_MULTI_ROW = 'Async Read Model: Fetch {}x rows'.format(NUM_INSTANCES_TO_DESERIALIZE)
+    ASYNC_READ_BULK = 'Async Read Model: Fetch {}x rows from the database at at time'.format(INSTANCES_TO_CREATE)
+    ASYNC_READ_MISSING_BULK = 'Async Read Missing Model: Fetch {}x from the database that dont exist'.format(
         INSTANCES_TO_CREATE)
 
-    LAZY_READ_SINGLE_ROW = 'lazy read: fetch a single row'
-    LAZY_READ_MULTI_ROW = 'lazy read: fetch {}x rows'.format(NUM_INSTANCES_TO_DESERIALIZE)
-    LAZY_READ_BULK = 'lazy read: fetch {}x rows from the database at at time'.format(INSTANCES_TO_CREATE)
-    LAZY_READ_MISSING_BULK = 'lazy read missing: fetch {}x from the database that dont exist'.format(
+    LAZY_READ_SINGLE_ROW = 'Lazy Read Model: Fetch a single row'
+    LAZY_READ_MULTI_ROW = 'Lazy Read Model: Fetch {}x rows'.format(NUM_INSTANCES_TO_DESERIALIZE)
+    LAZY_READ_BULK = 'Lazy Read Model: Fetch {}x rows from the database at at time'.format(INSTANCES_TO_CREATE)
+    LAZY_READ_MISSING_BULK = 'Lazy Read Missing Model: Fetch {}x from the database that dont exist'.format(
         INSTANCES_TO_CREATE)
 
-    CREATE_SINGLE_ROW = 'create: create a single row'
-    CREATE_MULTI_ROW = 'create: create {}x rows at at time'.format(NUM_INSTANCES_TO_DESERIALIZE)
+    CREATE_SINGLE_ROW = 'Create Model: Create a single row'
+    CREATE_MULTI_ROW = 'Create Model: Create {}x rows at at time'.format(NUM_INSTANCES_TO_DESERIALIZE)
+    CREATE_BULK_ROW = 'Create Model: Create {}x rows at at time'.format(INSTANCES_TO_CREATE)
 
-    UPDATE_SINGLE_ROW = 'update: update a single row'
-    UPDATE_MULTI_ROW = 'update: update {}x rows at a time'.format(NUM_INSTANCES_TO_DESERIALIZE)
-    UPDATE_BULK_ROW = 'update: update {}x rows at a time'.format(INSTANCES_TO_CREATE)
+    UPDATE_SINGLE_ROW = 'Update Model: Update a single row'
+    UPDATE_MULTI_ROW = 'Update Model: Update {}x rows at a time'.format(NUM_INSTANCES_TO_DESERIALIZE)
+    UPDATE_BULK_ROW = 'Update Model: Update {}x rows at a time'.format(INSTANCES_TO_CREATE)
 
-    DELETE_SINGLE_ROW = 'delete: delete a single row'
-    DELETE_MULTI_ROW = 'delete: delete {}x rows at a time'.format(NUM_INSTANCES_TO_DESERIALIZE)
-    DELETE_BULK_ROW = 'delete: delete {}x rows at a time'.format(INSTANCES_TO_CREATE)
+    DELETE_SINGLE_ROW = 'Delete Model: Delete a single row'
+    DELETE_MULTI_ROW = 'Delete Model: Delete {}x rows at a time'.format(NUM_INSTANCES_TO_DESERIALIZE)
+    DELETE_BULK_ROW = 'Delete Model: Delete {}x rows at a time'.format(INSTANCES_TO_CREATE)
 
 
 def benchmark_crud_models(klasses=None):
@@ -55,22 +56,28 @@ def benchmark_crud_models(klasses=None):
         _benchmark_READ_MULTI_ROW,
         _benchmark_READ_BULK,
         _benchmark_READ_MISSING_BULK,
+
+        _benchmark_CREATE_SINGLE_ROW,
+        _benchmark_CREATE_MULTI_ROW,
+        _benchmark_CREATE_BULK_ROW,
+
+        _benchmark_UPDATE_SINGLE_ROW,
+        _benchmark_UPDATE_MULTI_ROW,
+        _benchmark_UPDATE_BULK_ROW,
+
+        _benchmark_DELETE_SINGLE_ROW,
+        _benchmark_DELETE_MULTI_ROW,
+        _benchmark_DELETE_BULK_ROW,
+
         _benchmark_ASYNC_READ_SINGLE_ROW,
         _benchmark_ASYNC_READ_MULTI_ROW,
         _benchmark_ASYNC_READ_BULK,
         _benchmark_ASYNC_READ_MISSING_BULK,
+
         _benchmark_LAZY_READ_SINGLE_ROW,
         _benchmark_LAZY_READ_MULTI_ROW,
         _benchmark_LAZY_READ_BULK,
         _benchmark_LAZY_READ_MISSING_BULK,
-        _benchmark_CREATE_SINGLE_ROW,
-        _benchmark_CREATE_MULTI_ROW,
-        _benchmark_UPDATE_SINGLE_ROW,
-        _benchmark_UPDATE_MULTI_ROW,
-        _benchmark_UPDATE_BULK_ROW,
-        _benchmark_DELETE_SINGLE_ROW,
-        _benchmark_DELETE_MULTI_ROW,
-        _benchmark_DELETE_BULK_ROW,
     ]
     for test in tests:
         for klass in klasses:
@@ -268,6 +275,27 @@ def _benchmark_CREATE_MULTI_ROW(model_class):
     model_class.delete(rows)
 
     return CrudTestGroups.CREATE_MULTI_ROW, seconds, CRUD_ITERATIONS
+
+
+def _benchmark_CREATE_BULK_ROW(model_class):
+    rows = []
+
+    def fn():
+        local_rows = []
+        for _ in range(CRUD_ITERATIONS):
+            row = model_class()
+            for property in row._properties.keys():
+                setattr(row, property, str(uuid.uuid4()))
+            local_rows.append(row)
+        model_class.put(local_rows)
+        rows.extend(local_rows)
+
+    seconds = benchmark_fn(fn, CRUD_ITERATIONS)
+
+    # Cleanup after the test
+    model_class.delete(rows)
+
+    return CrudTestGroups.CREATE_BULK_ROW, seconds, CRUD_ITERATIONS
 
 
 def _benchmark_UPDATE_SINGLE_ROW(model_class):

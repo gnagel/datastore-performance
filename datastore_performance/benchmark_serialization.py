@@ -13,22 +13,22 @@ SERIALIZATION_ITERATIONS = 1000
 
 @enum.unique
 class SerializationTestGroups(enum.Enum):
-    MODEL_TO_PROTOBUF_STRING = 'serialize Model: model --> ... --> ... --> Protobuf binary (3-4x steps)'
-    ENTITY_TO_PROTOBUF_STRING = 'serialize db.Entity: db.Entity --> ... --> Protobuf binary (2-3x steps)'
-    ENTITY_PROTO_TO_PROTOBUF_STRING = 'serialize Protobuf data: entity_pb.EntityProto --> Protobuf binary (1x step)'
+    MODEL_TO_PROTOBUF_STRING = 'Serialize Model: model --> ... --> ... --> Protobuf binary (3-4x steps)'
+    ENTITY_TO_PROTOBUF_STRING = 'Serialize db.Entity: db.Entity --> ... --> Protobuf binary (2-3x steps)'
+    ENTITY_PROTO_TO_PROTOBUF_STRING = 'Serialize Protobuf data: entity_pb.EntityProto --> Protobuf binary (1x step)'
 
-    PROTOBUF_STRING_TO_MODEL = 'deserialize into Model: Protobuf binary --> ... --> Model (3-4x steps)'
-    PROTOBUF_STRING_TO_ENTITY = 'deserialize into db.Entity: Protobuf binary --> ... --> db.Entity (2-3x steps)'
-    PROTOBUF_STRING_TO_ENTITY_PROTO = 'deserialize into Protobuf data: Protobuf binary --> entity_pb.EntityProto (1x step)'
-    # PROTOBUF_STRING_TO_ENTITY_PROTO_WITH_REUSE = 'deserialize: Protobuf binary --> entity_pb.EntityProto with protobuf reuse'
+    PROTOBUF_STRING_TO_MODEL = 'Deserialize into Model: Protobuf binary --> ... --> Model (3-4x steps)'
+    PROTOBUF_STRING_TO_ENTITY = 'Deserialize into db.Entity: Protobuf binary --> ... --> db.Entity (2-3x steps)'
+    PROTOBUF_STRING_TO_ENTITY_PROTO = 'Deserialize into Protobuf data: Protobuf binary --> entity_pb.EntityProto (1x step)'
+    # PROTOBUF_STRING_TO_ENTITY_PROTO_WITH_REUSE = 'Deserialize: Protobuf binary --> entity_pb.EntityProto with protobuf reuse'
 
-    SINGLE_PROPERTY_ACCESS_TIMES_PROTOBUF_TO_MODEL = 'deserialize and read 1x property from the model: deserialize into Model w/ reading properties from the model'
-    MULTI_PROPERTY_ACCESS_TIMES_PROTOBUF_TO_MODEL = 'deserialize and read 10x properties from the model: deserialize into Model w/ reading properties from the model'
+    SINGLE_PROPERTY_ACCESS_TIMES_PROTOBUF_TO_MODEL = 'Deserialize and read 1x property from the model: deserialize into Model w/ reading properties from the model'
+    MULTI_PROPERTY_ACCESS_TIMES_PROTOBUF_TO_MODEL = 'Deserialize and read 10x properties from the model: deserialize into Model w/ reading properties from the model'
 
-    SINGLE_LAZY_PROPERTY_ACCESS_TIMES_PROTOBUF_TO_MODEL = 'deserialize and lazily read 1x property from the model: deserialize into Model w/ reading properties from the model'
-    MULTI_LAZY_PROPERTY_ACCESS_TIMES_PROTOBUF_TO_MODEL = 'deserialize and lazily read 10x properties from the model: deserialize into Model w/ reading properties from the model'
+    SINGLE_LAZY_PROPERTY_ACCESS_TIMES_PROTOBUF_TO_MODEL = 'Deserialize and lazily read 1x property from the model: deserialize into Model w/ reading properties from the model'
+    MULTI_LAZY_PROPERTY_ACCESS_TIMES_PROTOBUF_TO_MODEL = 'Deserialize and lazily read 10x properties from the model: deserialize into Model w/ reading properties from the model'
 
-    # PROTOBUF_PROPERTY_SIZE = 'pure python access to protobuf->property_size'
+    # PROTOBUF_PROPERTY_SIZE = 'Pure python access to protobuf->property_size'
 
 
 def benchmark_serialization_models(klasses=None):
@@ -46,18 +46,24 @@ def benchmark_serialization_models(klasses=None):
     # where the performance bottlenecks lie with model serialization/deserialization.
     #
     tests = [
-        _benchmark_SINGLE_PROPERTY_ACCESS_TIMES_PROTOBUF_TO_MODEL,
-        _benchmark_MULTI_PROPERTY_ACCESS_TIMES_PROTOBUF_TO_MODEL,
-        _benchmark_SINGLE_LAZY_PROPERTY_ACCESS_TIMES_PROTOBUF_TO_MODEL,
-        _benchmark_MULTI_LAZY_PROPERTY_ACCESS_TIMES_PROTOBUF_TO_MODEL,
+        # Serialize
         _benchmark_MODEL_TO_PROTOBUF_STRING,
         _benchmark_ENTITY_TO_PROTOBUF_STRING,
         _benchmark_ENTITY_PROTO_TO_PROTOBUF_STRING,
+
+        # Deserialize
         _benchmark_PROTOBUF_STRING_TO_MODEL,
         _benchmark_PROTOBUF_STRING_TO_ENTITY,
         _benchmark_PROTOBUF_STRING_TO_ENTITY_PROTO,
         # _benchmark_PROTOBUF_STRING_TO_ENTITY_PROTO_WITH_REUSE,
 
+        # Deserialize with property access
+        _benchmark_SINGLE_PROPERTY_ACCESS_TIMES_PROTOBUF_TO_MODEL,
+        _benchmark_MULTI_PROPERTY_ACCESS_TIMES_PROTOBUF_TO_MODEL,
+        _benchmark_SINGLE_LAZY_PROPERTY_ACCESS_TIMES_PROTOBUF_TO_MODEL,
+        _benchmark_MULTI_LAZY_PROPERTY_ACCESS_TIMES_PROTOBUF_TO_MODEL,
+
+        # Misc
         # _benchmark_PROTOBUF_PROPERTY_SIZE,
     ]
     results = []

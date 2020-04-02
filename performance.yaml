@@ -17,3 +17,6 @@ skip_files:
   - ^(.*/)?\..*$
   # skip the entire venv directory
   - ^venv$
+
+includes:
+  - env_variables.yaml

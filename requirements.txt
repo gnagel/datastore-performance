@@ -6,3 +6,6 @@ click
 Jinja2
 enum34==1.1.6
 pyyaml
+pg8000==1.12.5
+DBUtils==1.3
+simpleflake

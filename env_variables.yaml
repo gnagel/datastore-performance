@@ -1,0 +1,5 @@
+env_variables:
+  DATABASE_ID: ''
+  DATABASE_USER: ''
+  DATABASE_PASSWORD: ''
+  DATABASE_NAME: ''

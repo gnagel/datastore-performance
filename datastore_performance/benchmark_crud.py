@@ -1,15 +1,16 @@
 from __future__ import absolute_import
 
+import logging
 import time
 import uuid
 
 import enum
-from google.appengine.api import datastore
 from google.appengine.ext import ndb
 
-from datastore_performance import datastore_lazy
 from datastore_performance.constants import INSTANCES_TO_CREATE, NUM_INSTANCES_TO_DESERIALIZE, \
     create_result, create_row, create_rows, benchmark_fn, model_classes
+
+_logger = logging.getLogger(__name__)
 
 CRUD_ITERATIONS = 10
 
@@ -81,8 +82,10 @@ def benchmark_crud_models(klasses=None):
     ]
     for test in tests:
         for klass in klasses:
+            _logger.info((test.__name__, klass.__name__,))
             test_group, delta, iterations, row_count = test(klass)
             results.append(create_result(klass, test_group, delta, iterations, row_count))
+            _logger.info(results[-1])
 
     return results
 
@@ -134,8 +137,7 @@ def _benchmark_ASYNC_READ_SINGLE_ROW(model_class):
             key = key.to_old_key()
 
         def fn():
-            rpc = datastore.GetAsync([key])
-            rpc.get_result()
+            model_class.get_async([key])
 
         seconds = benchmark_fn(fn, CRUD_ITERATIONS)
     return CrudTestGroups.ASYNC_READ_SINGLE_ROW, seconds, CRUD_ITERATIONS, 1
@@ -147,8 +149,7 @@ def _benchmark_ASYNC_READ_MULTI_ROW(model_class):
             keys = [key.to_old_key() for key in keys]
 
         def fn():
-            rpc = datastore.GetAsync(keys)
-            rpc.get_result()
+            model_class.get_async(keys)
 
         seconds = benchmark_fn(fn, CRUD_ITERATIONS)
     return CrudTestGroups.ASYNC_READ_MULTI_ROW, seconds, CRUD_ITERATIONS, NUM_INSTANCES_TO_DESERIALIZE
@@ -160,8 +161,7 @@ def _benchmark_ASYNC_READ_BULK(model_class):
             keys = [key.to_old_key() for key in keys]
 
         def fn():
-            rpc = datastore.GetAsync(keys)
-            rpc.get_result()
+            model_class.get_async(keys)
 
         seconds = benchmark_fn(fn, CRUD_ITERATIONS)
     return CrudTestGroups.ASYNC_READ_BULK, seconds, CRUD_ITERATIONS, INSTANCES_TO_CREATE
@@ -178,8 +178,7 @@ def _benchmark_ASYNC_READ_MISSING_BULK(model_class):
             keys = [key.to_old_key() for key in keys]
 
         def fn():
-            rpc = datastore.GetAsync(keys)
-            rpc.get_result()
+            model_class.get_async(keys)
 
         seconds = benchmark_fn(fn, CRUD_ITERATIONS)
     return CrudTestGroups.ASYNC_READ_MISSING_BULK, seconds, CRUD_ITERATIONS, INSTANCES_TO_CREATE
@@ -191,7 +190,7 @@ def _benchmark_LAZY_READ_SINGLE_ROW(model_class):
             key = key.to_old_key()
 
         def fn():
-            datastore_lazy.get([key])
+            model_class.get_lazy([key])
 
         seconds = benchmark_fn(fn, CRUD_ITERATIONS)
     return CrudTestGroups.LAZY_READ_SINGLE_ROW, seconds, CRUD_ITERATIONS, 1
@@ -203,7 +202,7 @@ def _benchmark_LAZY_READ_MULTI_ROW(model_class):
             keys = [key.to_old_key() for key in keys]
 
         def fn():
-            datastore_lazy.get(keys)
+            model_class.get_lazy(keys)
 
         seconds = benchmark_fn(fn, CRUD_ITERATIONS)
     return CrudTestGroups.LAZY_READ_MULTI_ROW, seconds, CRUD_ITERATIONS, NUM_INSTANCES_TO_DESERIALIZE
@@ -215,7 +214,7 @@ def _benchmark_LAZY_READ_BULK(model_class):
             keys = [key.to_old_key() for key in keys]
 
         def fn():
-            datastore_lazy.get(keys)
+            model_class.get_lazy(keys)
 
         seconds = benchmark_fn(fn, CRUD_ITERATIONS)
     return CrudTestGroups.LAZY_READ_BULK, seconds, CRUD_ITERATIONS, INSTANCES_TO_CREATE
@@ -232,7 +231,7 @@ def _benchmark_LAZY_READ_MISSING_BULK(model_class):
             keys = [key.to_old_key() for key in keys]
 
         def fn():
-            datastore_lazy.get(keys)
+            model_class.get_lazy(keys)
 
         seconds = benchmark_fn(fn, CRUD_ITERATIONS)
     return CrudTestGroups.LAZY_READ_MISSING_BULK, seconds, CRUD_ITERATIONS, INSTANCES_TO_CREATE

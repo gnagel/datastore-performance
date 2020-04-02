@@ -1,5 +1,6 @@
 from __future__ import absolute_import
 
+import logging
 import os
 import time
 import urllib2
@@ -92,4 +93,5 @@ def _boot_app_engine(project_id):
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO)
     generate()

@@ -9,7 +9,7 @@ from google.appengine.ext import testbed
 from datastore_performance import constants
 from datastore_performance.benchmark_crud import _benchmark_READ_SINGLE_ROW
 from datastore_performance.benchmark_serialization import _benchmark_MODEL_TO_PROTOBUF_STRING
-from datastore_performance.models import Model10
+from datastore_performance.models import DbModel10, NdbModel10, PgModel10
 
 _testbed = None
 _index_yaml_path = None
@@ -40,14 +40,26 @@ def tearDownModule():
 
 
 class TestFormatCsv(unittest.TestCase):
-    def test_format_csv_1x_MODEL_TO_PROTOBUF_STRING(self):
-        test_group, delta, iterations = _benchmark_MODEL_TO_PROTOBUF_STRING(Model10)
-        result = constants.create_result(Model10, test_group, delta, iterations)
+    def test_format_csv_1x_DB_MODEL_TO_PROTOBUF_STRING(self):
+        test_group, delta, iterations, row_count = _benchmark_MODEL_TO_PROTOBUF_STRING(DbModel10)
+        result = constants.create_result(DbModel10, test_group, delta, iterations, row_count)
+        csv_string = constants.format_csv([result])
+        self.assertEqual(len(csv_string.split("\n")), 2, csv_string)
+
+    def test_format_csv_1x_NDB_MODEL_TO_PROTOBUF_STRING(self):
+        test_group, delta, iterations, row_count = _benchmark_MODEL_TO_PROTOBUF_STRING(NdbModel10)
+        result = constants.create_result(DbModel10, test_group, delta, iterations, row_count)
+        csv_string = constants.format_csv([result])
+        self.assertEqual(len(csv_string.split("\n")), 2, csv_string)
+
+    def test_format_csv_1x_SQL_MODEL_TO_PROTOBUF_STRING(self):
+        test_group, delta, iterations, row_count = _benchmark_MODEL_TO_PROTOBUF_STRING(PgModel10)
+        result = constants.create_result(DbModel10, test_group, delta, iterations, row_count)
         csv_string = constants.format_csv([result])
         self.assertEqual(len(csv_string.split("\n")), 2, csv_string)
 
     def test_format_csv_1x_READ_SINGLE_ROW(self):
-        test_group, delta, iterations = _benchmark_READ_SINGLE_ROW(Model10)
-        result = constants.create_result(Model10, test_group, delta, iterations)
+        test_group, delta, iterations, row_count = _benchmark_READ_SINGLE_ROW(DbModel10)
+        result = constants.create_result(DbModel10, test_group, delta, iterations, row_count)
         csv_string = constants.format_csv([result])
         self.assertEqual(len(csv_string.split("\n")), 2, csv_string)

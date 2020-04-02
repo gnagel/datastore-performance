@@ -7,7 +7,12 @@ services:
       - .:/app
       - ~/.config/gcloud:/root/.config/gcloud
     environment:
-      DATABASE_URL: postgresql+pg8000://postgres:postgres@db/postgres
+      DATABASE_ID: ''
+      DATABASE_USER: 'postgres'
+      DATABASE_PASSWORD: 'postgres'
+      DATABASE_NAME: 'postgres'
+      DATABASE_HOST: 'db'
+      DATABASE_PORT: 5432
 
   db:
     image: postgres:11-alpine

@@ -1,7 +1,10 @@
 from __future__ import absolute_import
 
+from google.appengine.api import datastore
 from google.appengine.datastore import entity_pb
 from google.appengine.ext import ndb
+
+from datastore_performance import datastore_lazy
 
 
 class NdbQueryMixin(object):
@@ -14,6 +17,20 @@ class NdbQueryMixin(object):
     def get(cls, keys):
         # Disable NDB's caching since it bypasses all deserialization, which is what we want to measure
         return ndb.get_multi(keys, use_cache=False, use_memcache=False)
+
+    @classmethod
+    def get_async(cls, keys):
+        keys, multiple = datastore.NormalizeAndTypeCheckKeys(keys)
+
+        rpc = datastore.GetAsync(keys)
+        results = rpc.get_result()
+        return results if multiple else results[0]
+
+    @classmethod
+    def get_lazy(cls, keys):
+        keys, multiple = datastore.NormalizeAndTypeCheckKeys(keys)
+        results = datastore_lazy.get(keys)
+        return results if multiple else results[0]
 
     @classmethod
     def put(cls, models):

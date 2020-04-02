@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 
 import csv
+import logging
 import math
 import time
 import uuid
@@ -10,6 +11,9 @@ from contextlib import contextmanager
 
 from google.appengine.ext import ndb
 
+from datastore_performance import sql_api
+
+_logger = logging.getLogger(__name__)
 
 TestRunResult = namedtuple('TestRunResult', [
     'klass',
@@ -29,15 +33,17 @@ READ_ITERATIONS = 100
 def model_classes():
     from datastore_performance import models
     model_classes = [
+        models.PgModel10,
         models.DbModel10,
         models.NdbModel10,
-
+        #
         models.DbExpando10,
         models.NdbExpando10,
-
+        #
+        models.PgModel100,
         models.DbModel100,
         models.NdbModel100,
-
+        #
         models.DbExpando100,
         models.NdbExpando100,
     ]
@@ -80,6 +86,7 @@ def create_row(model_class):
 
     # Wait till the data syncs to Datastore
     while not filter(lambda x: x, model_class.get([key])):
+        _logger.info("Waiting for %s models to appear ...", model_class.__name__)
         time.sleep(0.1)
 
     try:
@@ -112,6 +119,8 @@ def create_rows(model_class, count):
 def _resolve_key(row):
     if issubclass(row.__class__, ndb.Model):
         return row.key
+    if issubclass(row.__class__, sql_api.PgQueryMixin):
+        return row._key
     else:
         return row.key()
 
@@ -125,8 +134,8 @@ def benchmark_fn(fn, num_iterations):
         seconds = float(end - start)
         return seconds
     except NotImplementedError:
-        raise
-        # return None
+        # raise
+        return None
 
 
 def format_csv(results):
@@ -152,7 +161,7 @@ def format_csv(results):
             iteration_count,
         ]
         # Space the test groups apart
-        if index > 0 and result.test_group != results[index-1].test_group:
+        if index > 0 and result.test_group != results[index - 1].test_group:
             rows.append([])
         rows.append(row)
 

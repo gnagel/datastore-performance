@@ -12,7 +12,7 @@ from datastore_performance.constants import INSTANCES_TO_CREATE, NUM_INSTANCES_T
 
 _logger = logging.getLogger(__name__)
 
-CRUD_ITERATIONS = 10
+CRUD_ITERATIONS = 100
 
 
 @enum.unique
@@ -47,39 +47,78 @@ class CrudTestGroups(enum.Enum):
     DELETE_BULK_ROW = 'Delete Model: Delete {}x rows at a time'.format(INSTANCES_TO_CREATE)
 
 
-def benchmark_crud_models(klasses=None):
+@enum.unique
+class CrudOperation(enum.Enum):
+    READ = 'READ'
+    READ_MULTI = 'READ_MULTI'
+    READ_BULK = 'READ_BULK'
+    CREATE = 'CREATE'
+    UPDATE = 'UPDATE'
+    DELETE = 'DELETE'
+    ASYNC_READ = 'ASYNC_READ'
+    LAZY_READ = 'LAZY_READ'
+
+
+def benchmark_crud_models(
+        klasses=None,
+        run_test_groups=(
+                CrudOperation.READ.name,
+                CrudOperation.READ_MULTI.name,
+                CrudOperation.READ_BULK.name,
+                CrudOperation.CREATE.name,
+                CrudOperation.UPDATE.name,
+                CrudOperation.DELETE.name,
+                CrudOperation.ASYNC_READ.name,
+                CrudOperation.LAZY_READ.name,
+        )
+):
     if not klasses:
         klasses = model_classes()
 
     results = []
-    tests = [
+
+    test_groups = {}
+    test_groups[CrudOperation.READ.name] = [
         _benchmark_READ_SINGLE_ROW,
         _benchmark_READ_MULTI_ROW,
         _benchmark_READ_BULK,
         _benchmark_READ_MISSING_BULK,
-
+    ]
+    test_groups[CrudOperation.CREATE.name] = [
         _benchmark_CREATE_SINGLE_ROW,
         _benchmark_CREATE_MULTI_ROW,
         _benchmark_CREATE_BULK_ROW,
-
+    ]
+    test_groups[CrudOperation.UPDATE.name] = [
         _benchmark_UPDATE_SINGLE_ROW,
         _benchmark_UPDATE_MULTI_ROW,
         _benchmark_UPDATE_BULK_ROW,
-
+    ]
+    test_groups[CrudOperation.DELETE.name] = [
         _benchmark_DELETE_SINGLE_ROW,
         _benchmark_DELETE_MULTI_ROW,
         _benchmark_DELETE_BULK_ROW,
-
+    ]
+    test_groups[CrudOperation.ASYNC_READ.name] = [
         _benchmark_ASYNC_READ_SINGLE_ROW,
         _benchmark_ASYNC_READ_MULTI_ROW,
         _benchmark_ASYNC_READ_BULK,
         _benchmark_ASYNC_READ_MISSING_BULK,
-
+    ]
+    test_groups[CrudOperation.LAZY_READ.name] = [
         _benchmark_LAZY_READ_SINGLE_ROW,
         _benchmark_LAZY_READ_MULTI_ROW,
         _benchmark_LAZY_READ_BULK,
         _benchmark_LAZY_READ_MISSING_BULK,
     ]
+
+    if not run_test_groups:
+        run_test_groups = [e.name for e in CrudOperation]
+
+    tests = []
+    for run_test_group in run_test_groups:
+        tests.extend(test_groups[run_test_group])
+
     for test in tests:
         for klass in klasses:
             _logger.info((test.__name__, klass.__name__,))

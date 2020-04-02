@@ -1,0 +1,20 @@
+<html>
+<body>
+<table>
+    <thead>
+    {% for column in header %}
+        <th>{{ column }}</th>
+    {% endfor %}
+    </thead>
+    <tbody>
+    {% for result in rows %}
+        <tr>
+            {% for column in result %}
+                <td>{{ column }}</td>
+            {% endfor %}
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</body>
+</html>

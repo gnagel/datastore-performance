@@ -1,147 +1,231 @@
 Operation,Description of test,Model Name,Avg Milliseconds per call,Total Milliseconds all iterations,Number of Columns,Number of Rows,Number of Iterations
-Read Model,Fetch a single row,PgModel10,8.53,85.0,10,1,10
-Read Model,Fetch a single row,DbModel10,2.53,25.0,10,1,10
-Read Model,Fetch a single row,DbExpando10,3.64,36.0,10,1,10
-Read Model,Fetch a single row,PgModel100,18.41,184.0,100,1,10
-Read Model,Fetch a single row,DbModel100,10.3,103.0,100,1,10
-Read Model,Fetch a single row,NdbModel100,9.05,90.0,100,1,10
+Read Model,Fetch a single row,PgModel10,3.83,38.0,10,1,10
+Read Model,Fetch a single row,DbModel10,0.96,9.0,10,1,10
+Read Model,Fetch a single row,NdbModel10,1.34,13.0,10,1,10
+Read Model,Fetch a single row,DbExpando10,1.25,12.0,10,1,10
+Read Model,Fetch a single row,NdbExpando10,1.23,12.0,10,1,10
+Read Model,Fetch a single row,PgModel100,7.17,71.0,100,1,10
+Read Model,Fetch a single row,DbModel100,5.34,53.0,100,1,10
+Read Model,Fetch a single row,NdbModel100,5.24,52.0,100,1,10
+Read Model,Fetch a single row,DbExpando100,6.59,65.0,100,1,10
+Read Model,Fetch a single row,NdbExpando100,5.23,52.0,100,1,10
 
-Read Model,Fetch 20x rows,PgModel10,10.6,106.0,10,20,10
-Read Model,Fetch 20x rows,DbModel10,34.76,347.0,10,20,10
-Read Model,Fetch 20x rows,DbExpando10,36.99,369.0,10,20,10
-Read Model,Fetch 20x rows,PgModel100,23.97,239.0,100,20,10
-Read Model,Fetch 20x rows,DbModel100,162.81,1628.0,100,20,10
-Read Model,Fetch 20x rows,NdbModel100,147.81,1478.0,100,20,10
+Read Model,Fetch 20x rows,PgModel10,7.06,70.0,10,20,10
+Read Model,Fetch 20x rows,DbModel10,18.74,187.0,10,20,10
+Read Model,Fetch 20x rows,NdbModel10,18.08,180.0,10,20,10
+Read Model,Fetch 20x rows,DbExpando10,21.58,215.0,10,20,10
+Read Model,Fetch 20x rows,NdbExpando10,23.36,233.0,10,20,10
+Read Model,Fetch 20x rows,PgModel100,25.17,251.0,100,20,10
+Read Model,Fetch 20x rows,DbModel100,114.26,1142.0,100,20,10
+Read Model,Fetch 20x rows,NdbModel100,112.14,1121.0,100,20,10
+Read Model,Fetch 20x rows,DbExpando100,141.2,1412.0,100,20,10
+Read Model,Fetch 20x rows,NdbExpando100,111.39,1113.0,100,20,10
 
-Read Model,Fetch 100x rows from the database at at time,PgModel10,32.26,322.0,10,100,10
-Read Model,Fetch 100x rows from the database at at time,DbModel10,115.58,1155.0,10,100,10
-Read Model,Fetch 100x rows from the database at at time,DbExpando10,149.94,1499.0,10,100,10
-Read Model,Fetch 100x rows from the database at at time,PgModel100,162.1,1621.0,100,100,10
-Read Model,Fetch 100x rows from the database at at time,DbModel100,814.77,8147.0,100,100,10
-Read Model,Fetch 100x rows from the database at at time,NdbModel100,794.7,7947.0,100,100,10
+Read Model,Fetch 100x rows from the database at at time,PgModel10,18.56,185.0,10,100,10
+Read Model,Fetch 100x rows from the database at at time,DbModel10,101.28,1012.0,10,100,10
+Read Model,Fetch 100x rows from the database at at time,NdbModel10,102.33,1023.0,10,100,10
+Read Model,Fetch 100x rows from the database at at time,DbExpando10,116.45,1164.0,10,100,10
+Read Model,Fetch 100x rows from the database at at time,NdbExpando10,102.67,1026.0,10,100,10
+Read Model,Fetch 100x rows from the database at at time,PgModel100,129.16,1291.0,100,100,10
+Read Model,Fetch 100x rows from the database at at time,DbModel100,634.21,6342.0,100,100,10
+Read Model,Fetch 100x rows from the database at at time,NdbModel100,581.68,5816.0,100,100,10
+Read Model,Fetch 100x rows from the database at at time,DbExpando100,780.32,7803.0,100,100,10
+Read Model,Fetch 100x rows from the database at at time,NdbExpando100,668.08,6680.0,100,100,10
 
-Read Missing Model,Fetch 100x from the database that dont exist,PgModel10,6.61,66.0,10,100,10
-Read Missing Model,Fetch 100x from the database that dont exist,DbModel10,28.33,283.0,10,100,10
-Read Missing Model,Fetch 100x from the database that dont exist,DbExpando10,25.94,259.0,10,100,10
-Read Missing Model,Fetch 100x from the database that dont exist,PgModel100,48.78,487.0,100,100,10
-Read Missing Model,Fetch 100x from the database that dont exist,DbModel100,26.48,264.0,100,100,10
-Read Missing Model,Fetch 100x from the database that dont exist,NdbModel100,63.69,636.0,100,100,10
+Read Missing Model,Fetch 100x from the database that dont exist,PgModel10,6.32,63.0,10,100,10
+Read Missing Model,Fetch 100x from the database that dont exist,DbModel10,33.82,338.0,10,100,10
+Read Missing Model,Fetch 100x from the database that dont exist,NdbModel10,44.57,445.0,10,100,10
+Read Missing Model,Fetch 100x from the database that dont exist,DbExpando10,19.74,197.0,10,100,10
+Read Missing Model,Fetch 100x from the database that dont exist,NdbExpando10,41.54,415.0,10,100,10
+Read Missing Model,Fetch 100x from the database that dont exist,PgModel100,47.22,472.0,100,100,10
+Read Missing Model,Fetch 100x from the database that dont exist,DbModel100,22.36,223.0,100,100,10
+Read Missing Model,Fetch 100x from the database that dont exist,NdbModel100,42.34,423.0,100,100,10
+Read Missing Model,Fetch 100x from the database that dont exist,DbExpando100,24.13,241.0,100,100,10
+Read Missing Model,Fetch 100x from the database that dont exist,NdbExpando100,46.81,468.0,100,100,10
 
-Create Model,Create a single row,PgModel10,12.83,128.0,10,1,10
-Create Model,Create a single row,DbModel10,6.34,63.0,10,1,10
-Create Model,Create a single row,DbExpando10,7.13,71.0,10,1,10
-Create Model,Create a single row,PgModel100,16.66,166.0,100,1,10
-Create Model,Create a single row,DbModel100,19.58,195.0,100,1,10
-Create Model,Create a single row,NdbModel100,21.04,210.0,100,1,10
+Create Model,Create a single row,PgModel10,5.1,51.0,10,1,10
+Create Model,Create a single row,DbModel10,2.41,24.0,10,1,10
+Create Model,Create a single row,NdbModel10,3.28,32.0,10,1,10
+Create Model,Create a single row,DbExpando10,3.62,36.0,10,1,10
+Create Model,Create a single row,NdbExpando10,3.62,36.0,10,1,10
+Create Model,Create a single row,PgModel100,9.75,97.0,100,1,10
+Create Model,Create a single row,DbModel100,14.52,145.0,100,1,10
+Create Model,Create a single row,NdbModel100,18.09,180.0,100,1,10
+Create Model,Create a single row,DbExpando100,19.07,190.0,100,1,10
+Create Model,Create a single row,NdbExpando100,15.9,159.0,100,1,10
 
-Create Model,Create 20x rows at at time,PgModel10,19.94,199.0,10,20,10
-Create Model,Create 20x rows at at time,DbModel10,59.46,594.0,10,20,10
-Create Model,Create 20x rows at at time,DbExpando10,76.95,769.0,10,20,10
-Create Model,Create 20x rows at at time,PgModel100,121.73,1217.0,100,20,10
-Create Model,Create 20x rows at at time,DbModel100,374.89,3748.0,100,20,10
-Create Model,Create 20x rows at at time,NdbModel100,406.81,4068.0,100,20,10
+Create Model,Create 20x rows at at time,PgModel10,15.51,155.0,10,20,10
+Create Model,Create 20x rows at at time,DbModel10,50.97,509.0,10,20,10
+Create Model,Create 20x rows at at time,NdbModel10,51.42,514.0,10,20,10
+Create Model,Create 20x rows at at time,DbExpando10,75.36,753.0,10,20,10
+Create Model,Create 20x rows at at time,NdbExpando10,55.0,550.0,10,20,10
+Create Model,Create 20x rows at at time,PgModel100,98.46,984.0,100,20,10
+Create Model,Create 20x rows at at time,DbModel100,293.33,2933.0,100,20,10
+Create Model,Create 20x rows at at time,NdbModel100,298.45,2984.0,100,20,10
+Create Model,Create 20x rows at at time,DbExpando100,380.51,3805.0,100,20,10
+Create Model,Create 20x rows at at time,NdbExpando100,321.33,3213.0,100,20,10
 
-Create Model,Create 100x rows at at time,PgModel10,12.57,125.0,10,10,10
-Create Model,Create 100x rows at at time,DbModel10,40.05,400.0,10,10,10
-Create Model,Create 100x rows at at time,DbExpando10,36.62,366.0,10,10,10
-Create Model,Create 100x rows at at time,PgModel100,79.12,791.0,100,10,10
-Create Model,Create 100x rows at at time,DbModel100,183.28,1832.0,100,10,10
-Create Model,Create 100x rows at at time,NdbModel100,185.35,1853.0,100,10,10
+Create Model,Create 100x rows at at time,PgModel10,8.13,81.0,10,10,10
+Create Model,Create 100x rows at at time,DbModel10,26.07,260.0,10,10,10
+Create Model,Create 100x rows at at time,NdbModel10,32.75,327.0,10,10,10
+Create Model,Create 100x rows at at time,DbExpando10,40.6,406.0,10,10,10
+Create Model,Create 100x rows at at time,NdbExpando10,35.47,354.0,10,10,10
+Create Model,Create 100x rows at at time,PgModel100,55.11,551.0,100,10,10
+Create Model,Create 100x rows at at time,DbModel100,150.23,1502.0,100,10,10
+Create Model,Create 100x rows at at time,NdbModel100,153.28,1532.0,100,10,10
+Create Model,Create 100x rows at at time,DbExpando100,191.33,1913.0,100,10,10
+Create Model,Create 100x rows at at time,NdbExpando100,161.58,1615.0,100,10,10
 
-Update Model,Update a single row,PgModel10,6.88,68.0,10,1,10
-Update Model,Update a single row,DbModel10,4.55,45.0,10,1,10
-Update Model,Update a single row,DbExpando10,6.72,67.0,10,1,10
-Update Model,Update a single row,PgModel100,12.02,120.0,100,1,10
-Update Model,Update a single row,DbModel100,21.22,212.0,100,1,10
-Update Model,Update a single row,NdbModel100,23.74,237.0,100,1,10
+Update Model,Update a single row,PgModel10,5.09,50.0,10,1,10
+Update Model,Update a single row,DbModel10,4.1,41.0,10,1,10
+Update Model,Update a single row,NdbModel10,5.65,56.0,10,1,10
+Update Model,Update a single row,DbExpando10,4.53,45.0,10,1,10
+Update Model,Update a single row,NdbExpando10,5.23,52.0,10,1,10
+Update Model,Update a single row,PgModel100,10.25,102.0,100,1,10
+Update Model,Update a single row,DbModel100,15.36,153.0,100,1,10
+Update Model,Update a single row,NdbModel100,17.18,171.0,100,1,10
+Update Model,Update a single row,DbExpando100,17.65,176.0,100,1,10
+Update Model,Update a single row,NdbExpando100,15.53,155.0,100,1,10
 
-Update Model,Update 20x rows at a time,PgModel10,9.88,98.0,10,20,10
-Update Model,Update 20x rows at a time,DbModel10,66.04,660.0,10,20,10
-Update Model,Update 20x rows at a time,DbExpando10,67.46,674.0,10,20,10
-Update Model,Update 20x rows at a time,PgModel100,53.77,537.0,100,20,10
-Update Model,Update 20x rows at a time,DbModel100,377.67,3776.0,100,20,10
-Update Model,Update 20x rows at a time,NdbModel100,403.94,4039.0,100,20,10
+Update Model,Update 20x rows at a time,PgModel10,8.21,82.0,10,20,10
+Update Model,Update 20x rows at a time,DbModel10,65.95,659.0,10,20,10
+Update Model,Update 20x rows at a time,NdbModel10,77.36,773.0,10,20,10
+Update Model,Update 20x rows at a time,DbExpando10,68.67,686.0,10,20,10
+Update Model,Update 20x rows at a time,NdbExpando10,75.82,758.0,10,20,10
+Update Model,Update 20x rows at a time,PgModel100,42.95,429.0,100,20,10
+Update Model,Update 20x rows at a time,DbModel100,311.2,3112.0,100,20,10
+Update Model,Update 20x rows at a time,NdbModel100,396.89,3968.0,100,20,10
+Update Model,Update 20x rows at a time,DbExpando100,381.8,3818.0,100,20,10
+Update Model,Update 20x rows at a time,NdbExpando100,367.31,3673.0,100,20,10
 
-Update Model,Update 100x rows at a time,PgModel10,10.0,100.0,10,10,10
-Update Model,Update 100x rows at a time,DbModel10,33.42,334.0,10,10,10
-Update Model,Update 100x rows at a time,DbExpando10,40.88,408.0,10,10,10
-Update Model,Update 100x rows at a time,PgModel100,34.6,346.0,100,10,10
-Update Model,Update 100x rows at a time,DbModel100,185.61,1856.0,100,10,10
-Update Model,Update 100x rows at a time,NdbModel100,208.1,2081.0,100,10,10
+Update Model,Update 100x rows at a time,PgModel10,7.23,72.0,10,10,10
+Update Model,Update 100x rows at a time,DbModel10,41.53,415.0,10,10,10
+Update Model,Update 100x rows at a time,NdbModel10,42.37,423.0,10,10,10
+Update Model,Update 100x rows at a time,DbExpando10,46.58,465.0,10,10,10
+Update Model,Update 100x rows at a time,NdbExpando10,51.65,516.0,10,10,10
+Update Model,Update 100x rows at a time,PgModel100,25.37,253.0,100,10,10
+Update Model,Update 100x rows at a time,DbModel100,157.22,1572.0,100,10,10
+Update Model,Update 100x rows at a time,NdbModel100,169.46,1694.0,100,10,10
+Update Model,Update 100x rows at a time,DbExpando100,183.61,1836.0,100,10,10
+Update Model,Update 100x rows at a time,NdbExpando100,180.1,1801.0,100,10,10
 
-Delete Model,Delete a single row,PgModel10,6.42,64.0,10,10,10
-Delete Model,Delete a single row,DbModel10,2.05,20.0,10,10,10
-Delete Model,Delete a single row,DbExpando10,2.45,24.0,10,10,10
-Delete Model,Delete a single row,PgModel100,7.7,77.0,100,10,10
-Delete Model,Delete a single row,DbModel100,2.06,20.0,100,10,10
-Delete Model,Delete a single row,NdbModel100,2.58,25.0,100,10,10
+Delete Model,Delete a single row,PgModel10,4.96,49.0,10,10,10
+Delete Model,Delete a single row,DbModel10,2.15,21.0,10,10,10
+Delete Model,Delete a single row,NdbModel10,2.54,25.0,10,10,10
+Delete Model,Delete a single row,DbExpando10,1.44,14.0,10,10,10
+Delete Model,Delete a single row,NdbExpando10,2.41,24.0,10,10,10
+Delete Model,Delete a single row,PgModel100,4.95,49.0,100,10,10
+Delete Model,Delete a single row,DbModel100,1.91,19.0,100,10,10
+Delete Model,Delete a single row,NdbModel100,3.5,35.0,100,10,10
+Delete Model,Delete a single row,DbExpando100,1.45,14.0,100,10,10
+Delete Model,Delete a single row,NdbExpando100,2.61,26.0,100,10,10
 
-Delete Model,Delete 20x rows at a time,PgModel10,6.79,67.0,10,20,10
-Delete Model,Delete 20x rows at a time,DbModel10,21.88,218.0,10,20,10
-Delete Model,Delete 20x rows at a time,DbExpando10,20.85,208.0,10,20,10
-Delete Model,Delete 20x rows at a time,PgModel100,17.85,178.0,100,20,10
-Delete Model,Delete 20x rows at a time,DbModel100,30.18,301.0,100,20,10
-Delete Model,Delete 20x rows at a time,NdbModel100,40.9,409.0,100,20,10
+Delete Model,Delete 20x rows at a time,PgModel10,6.59,65.0,10,20,10
+Delete Model,Delete 20x rows at a time,DbModel10,42.22,422.0,10,20,10
+Delete Model,Delete 20x rows at a time,NdbModel10,37.93,379.0,10,20,10
+Delete Model,Delete 20x rows at a time,DbExpando10,25.1,251.0,10,20,10
+Delete Model,Delete 20x rows at a time,NdbExpando10,37.61,376.0,10,20,10
+Delete Model,Delete 20x rows at a time,PgModel100,14.64,146.0,100,20,10
+Delete Model,Delete 20x rows at a time,DbModel100,44.19,441.0,100,20,10
+Delete Model,Delete 20x rows at a time,NdbModel100,53.89,538.0,100,20,10
+Delete Model,Delete 20x rows at a time,DbExpando100,48.18,481.0,100,20,10
+Delete Model,Delete 20x rows at a time,NdbExpando100,49.57,495.0,100,20,10
 
-Delete Model,Delete 100x rows at a time,PgModel10,6.66,66.0,10,10,10
-Delete Model,Delete 100x rows at a time,DbModel10,18.11,181.0,10,10,10
-Delete Model,Delete 100x rows at a time,DbExpando10,13.93,139.0,10,10,10
-Delete Model,Delete 100x rows at a time,PgModel100,9.41,94.0,100,10,10
-Delete Model,Delete 100x rows at a time,DbModel100,64.87,648.0,100,10,10
-Delete Model,Delete 100x rows at a time,NdbModel100,22.32,223.0,100,10,10
+Delete Model,Delete 100x rows at a time,PgModel10,4.88,48.0,10,10,10
+Delete Model,Delete 100x rows at a time,DbModel10,28.19,281.0,10,10,10
+Delete Model,Delete 100x rows at a time,NdbModel10,54.95,549.0,10,10,10
+Delete Model,Delete 100x rows at a time,DbExpando10,37.08,370.0,10,10,10
+Delete Model,Delete 100x rows at a time,NdbExpando10,40.14,401.0,10,10,10
+Delete Model,Delete 100x rows at a time,PgModel100,10.6,106.0,100,10,10
+Delete Model,Delete 100x rows at a time,DbModel100,25.66,256.0,100,10,10
+Delete Model,Delete 100x rows at a time,NdbModel100,50.03,500.0,100,10,10
+Delete Model,Delete 100x rows at a time,DbExpando100,26.49,264.0,100,10,10
+Delete Model,Delete 100x rows at a time,NdbExpando100,32.16,321.0,100,10,10
 
-Async Read Model,Fetch a single row,PgModel10,,,10,None,0
-Async Read Model,Fetch a single row,DbModel10,1.7,17.0,10,1,10
-Async Read Model,Fetch a single row,DbExpando10,1.97,19.0,10,1,10
-Async Read Model,Fetch a single row,PgModel100,,,100,None,0
-Async Read Model,Fetch a single row,DbModel100,9.38,93.0,100,1,10
-Async Read Model,Fetch a single row,NdbModel100,9.18,91.0,100,1,10
+Async Read Model,Fetch a single row,PgModel10,,,10,,
+Async Read Model,Fetch a single row,DbModel10,1.37,13.0,10,1,10
+Async Read Model,Fetch a single row,NdbModel10,1.25,12.0,10,1,10
+Async Read Model,Fetch a single row,DbExpando10,1.16,11.0,10,1,10
+Async Read Model,Fetch a single row,NdbExpando10,1.03,10.0,10,1,10
+Async Read Model,Fetch a single row,PgModel100,,,100,,
+Async Read Model,Fetch a single row,DbModel100,6.08,60.0,100,1,10
+Async Read Model,Fetch a single row,NdbModel100,13.89,138.0,100,1,10
+Async Read Model,Fetch a single row,DbExpando100,5.52,55.0,100,1,10
+Async Read Model,Fetch a single row,NdbExpando100,6.18,61.0,100,1,10
 
-Async Read Model,Fetch 20x rows,PgModel10,,,10,None,0
-Async Read Model,Fetch 20x rows,DbModel10,30.63,306.0,10,20,10
-Async Read Model,Fetch 20x rows,DbExpando10,20.52,205.0,10,20,10
-Async Read Model,Fetch 20x rows,PgModel100,,,100,None,0
-Async Read Model,Fetch 20x rows,DbModel100,177.11,1771.0,100,20,10
-Async Read Model,Fetch 20x rows,NdbModel100,271.81,2718.0,100,20,10
+Async Read Model,Fetch 20x rows,PgModel10,,,10,,
+Async Read Model,Fetch 20x rows,DbModel10,20.54,205.0,10,20,10
+Async Read Model,Fetch 20x rows,NdbModel10,17.41,174.0,10,20,10
+Async Read Model,Fetch 20x rows,DbExpando10,20.39,203.0,10,20,10
+Async Read Model,Fetch 20x rows,NdbExpando10,25.29,252.0,10,20,10
+Async Read Model,Fetch 20x rows,PgModel100,,,100,,
+Async Read Model,Fetch 20x rows,DbModel100,127.6,1276.0,100,20,10
+Async Read Model,Fetch 20x rows,NdbModel100,138.88,1388.0,100,20,10
+Async Read Model,Fetch 20x rows,DbExpando100,135.2,1352.0,100,20,10
+Async Read Model,Fetch 20x rows,NdbExpando100,136.48,1364.0,100,20,10
 
-Async Read Model,Fetch 100x rows from the database at at time,PgModel10,,,10,None,0
-Async Read Model,Fetch 100x rows from the database at at time,DbModel10,207.35,2073.0,10,100,10
-Async Read Model,Fetch 100x rows from the database at at time,DbExpando10,212.24,2122.0,10,100,10
-Async Read Model,Fetch 100x rows from the database at at time,PgModel100,,,100,None,0
-Async Read Model,Fetch 100x rows from the database at at time,DbModel100,1283.05,12830.0,100,100,10
-Async Read Model,Fetch 100x rows from the database at at time,NdbModel100,946.38,9463.0,100,100,10
+Async Read Model,Fetch 100x rows from the database at at time,PgModel10,,,10,,
+Async Read Model,Fetch 100x rows from the database at at time,DbModel10,106.8,1068.0,10,100,10
+Async Read Model,Fetch 100x rows from the database at at time,NdbModel10,105.46,1054.0,10,100,10
+Async Read Model,Fetch 100x rows from the database at at time,DbExpando10,106.39,1063.0,10,100,10
+Async Read Model,Fetch 100x rows from the database at at time,NdbExpando10,113.53,1135.0,10,100,10
+Async Read Model,Fetch 100x rows from the database at at time,PgModel100,,,100,,
+Async Read Model,Fetch 100x rows from the database at at time,DbModel100,662.8,6628.0,100,100,10
+Async Read Model,Fetch 100x rows from the database at at time,NdbModel100,727.7,7277.0,100,100,10
+Async Read Model,Fetch 100x rows from the database at at time,DbExpando100,637.74,6377.0,100,100,10
+Async Read Model,Fetch 100x rows from the database at at time,NdbExpando100,699.33,6993.0,100,100,10
 
-Async Read Missing Model,Fetch 100x from the database that dont exist,PgModel10,,,10,None,0
-Async Read Missing Model,Fetch 100x from the database that dont exist,DbModel10,35.65,356.0,10,100,10
-Async Read Missing Model,Fetch 100x from the database that dont exist,DbExpando10,26.13,261.0,10,100,10
-Async Read Missing Model,Fetch 100x from the database that dont exist,PgModel100,,,100,None,0
-Async Read Missing Model,Fetch 100x from the database that dont exist,DbModel100,29.25,292.0,100,100,10
-Async Read Missing Model,Fetch 100x from the database that dont exist,NdbModel100,37.46,374.0,100,100,10
+Async Read Missing Model,Fetch 100x from the database that dont exist,PgModel10,,,10,,
+Async Read Missing Model,Fetch 100x from the database that dont exist,DbModel10,20.16,201.0,10,100,10
+Async Read Missing Model,Fetch 100x from the database that dont exist,NdbModel10,22.01,220.0,10,100,10
+Async Read Missing Model,Fetch 100x from the database that dont exist,DbExpando10,21.58,215.0,10,100,10
+Async Read Missing Model,Fetch 100x from the database that dont exist,NdbExpando10,21.6,216.0,10,100,10
+Async Read Missing Model,Fetch 100x from the database that dont exist,PgModel100,,,100,,
+Async Read Missing Model,Fetch 100x from the database that dont exist,DbModel100,20.73,207.0,100,100,10
+Async Read Missing Model,Fetch 100x from the database that dont exist,NdbModel100,22.44,224.0,100,100,10
+Async Read Missing Model,Fetch 100x from the database that dont exist,DbExpando100,18.42,184.0,100,100,10
+Async Read Missing Model,Fetch 100x from the database that dont exist,NdbExpando100,20.37,203.0,100,100,10
 
-Lazy Read Model,Fetch a single row,PgModel10,,,10,None,0
-Lazy Read Model,Fetch a single row,DbModel10,2.9,29.0,10,1,10
-Lazy Read Model,Fetch a single row,DbExpando10,5.23,52.0,10,1,10
-Lazy Read Model,Fetch a single row,PgModel100,,,100,None,0
-Lazy Read Model,Fetch a single row,DbModel100,9.57,95.0,100,1,10
-Lazy Read Model,Fetch a single row,NdbModel100,7.21,72.0,100,1,10
+Lazy Read Model,Fetch a single row,PgModel10,,,10,,
+Lazy Read Model,Fetch a single row,DbModel10,0.8,8.0,10,1,10
+Lazy Read Model,Fetch a single row,NdbModel10,0.75,7.0,10,1,10
+Lazy Read Model,Fetch a single row,DbExpando10,0.85,8.0,10,1,10
+Lazy Read Model,Fetch a single row,NdbExpando10,0.82,8.0,10,1,10
+Lazy Read Model,Fetch a single row,PgModel100,,,100,,
+Lazy Read Model,Fetch a single row,DbModel100,4.96,49.0,100,1,10
+Lazy Read Model,Fetch a single row,NdbModel100,5.06,50.0,100,1,10
+Lazy Read Model,Fetch a single row,DbExpando100,5.32,53.0,100,1,10
+Lazy Read Model,Fetch a single row,NdbExpando100,4.52,45.0,100,1,10
 
-Lazy Read Model,Fetch 20x rows,PgModel10,,,10,None,0
-Lazy Read Model,Fetch 20x rows,DbModel10,21.71,217.0,10,20,10
-Lazy Read Model,Fetch 20x rows,DbExpando10,21.32,213.0,10,20,10
-Lazy Read Model,Fetch 20x rows,PgModel100,,,100,None,0
-Lazy Read Model,Fetch 20x rows,DbModel100,141.23,1412.0,100,20,10
-Lazy Read Model,Fetch 20x rows,NdbModel100,158.87,1588.0,100,20,10
+Lazy Read Model,Fetch 20x rows,PgModel10,,,10,,
+Lazy Read Model,Fetch 20x rows,DbModel10,16.12,161.0,10,20,10
+Lazy Read Model,Fetch 20x rows,NdbModel10,14.54,145.0,10,20,10
+Lazy Read Model,Fetch 20x rows,DbExpando10,14.61,146.0,10,20,10
+Lazy Read Model,Fetch 20x rows,NdbExpando10,21.05,210.0,10,20,10
+Lazy Read Model,Fetch 20x rows,PgModel100,,,100,,
+Lazy Read Model,Fetch 20x rows,DbModel100,99.99,999.0,100,20,10
+Lazy Read Model,Fetch 20x rows,NdbModel100,113.34,1133.0,100,20,10
+Lazy Read Model,Fetch 20x rows,DbExpando100,106.93,1069.0,100,20,10
+Lazy Read Model,Fetch 20x rows,NdbExpando100,112.66,1126.0,100,20,10
 
-Lazy Read Model,Fetch 100x rows from the database at at time,PgModel10,,,10,None,0
-Lazy Read Model,Fetch 100x rows from the database at at time,DbModel10,111.53,1115.0,10,100,10
-Lazy Read Model,Fetch 100x rows from the database at at time,DbExpando10,120.04,1200.0,10,100,10
-Lazy Read Model,Fetch 100x rows from the database at at time,PgModel100,,,100,None,0
-Lazy Read Model,Fetch 100x rows from the database at at time,DbModel100,851.78,8517.0,100,100,10
-Lazy Read Model,Fetch 100x rows from the database at at time,NdbModel100,957.27,9572.0,100,100,10
+Lazy Read Model,Fetch 100x rows from the database at at time,PgModel10,,,10,,
+Lazy Read Model,Fetch 100x rows from the database at at time,DbModel10,77.44,774.0,10,100,10
+Lazy Read Model,Fetch 100x rows from the database at at time,NdbModel10,81.86,818.0,10,100,10
+Lazy Read Model,Fetch 100x rows from the database at at time,DbExpando10,79.01,790.0,10,100,10
+Lazy Read Model,Fetch 100x rows from the database at at time,NdbExpando10,81.35,813.0,10,100,10
+Lazy Read Model,Fetch 100x rows from the database at at time,PgModel100,,,100,,
+Lazy Read Model,Fetch 100x rows from the database at at time,DbModel100,529.74,5297.0,100,100,10
+Lazy Read Model,Fetch 100x rows from the database at at time,NdbModel100,555.35,5553.0,100,100,10
+Lazy Read Model,Fetch 100x rows from the database at at time,DbExpando100,523.96,5239.0,100,100,10
+Lazy Read Model,Fetch 100x rows from the database at at time,NdbExpando100,559.69,5596.0,100,100,10
 
-Lazy Read Missing Model,Fetch 100x from the database that dont exist,PgModel10,,,10,None,0
-Lazy Read Missing Model,Fetch 100x from the database that dont exist,DbModel10,38.81,388.0,10,100,10
-Lazy Read Missing Model,Fetch 100x from the database that dont exist,DbExpando10,34.98,349.0,10,100,10
-Lazy Read Missing Model,Fetch 100x from the database that dont exist,PgModel100,,,100,None,0
-Lazy Read Missing Model,Fetch 100x from the database that dont exist,DbModel100,38.59,385.0,100,100,10
-Lazy Read Missing Model,Fetch 100x from the database that dont exist,NdbModel100,29.74,297.0,100,100,10
+Lazy Read Missing Model,Fetch 100x from the database that dont exist,PgModel10,,,10,,
+Lazy Read Missing Model,Fetch 100x from the database that dont exist,DbModel10,18.37,183.0,10,100,10
+Lazy Read Missing Model,Fetch 100x from the database that dont exist,NdbModel10,19.53,195.0,10,100,10
+Lazy Read Missing Model,Fetch 100x from the database that dont exist,DbExpando10,18.74,187.0,10,100,10
+Lazy Read Missing Model,Fetch 100x from the database that dont exist,NdbExpando10,19.59,195.0,10,100,10
+Lazy Read Missing Model,Fetch 100x from the database that dont exist,PgModel100,,,100,,
+Lazy Read Missing Model,Fetch 100x from the database that dont exist,DbModel100,18.53,185.0,100,100,10
+Lazy Read Missing Model,Fetch 100x from the database that dont exist,NdbModel100,19.03,190.0,100,100,10
+Lazy Read Missing Model,Fetch 100x from the database that dont exist,DbExpando100,20.3,203.0,100,100,10
+Lazy Read Missing Model,Fetch 100x from the database that dont exist,NdbExpando100,18.68,186.0,100,100,10

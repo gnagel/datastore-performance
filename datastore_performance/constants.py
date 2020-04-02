@@ -56,10 +56,10 @@ def create_result(model_class, test_group, seconds, iterations, row_count):
             klass=model_class.__name__,
             properties_count=len(model_class._properties.keys()),
             test_group=test_group.value,
-            row_count='None',
-            iteration_count=0,
-            total_milli_seconds='',
-            avg_milli_seconds='',
+            row_count=None,
+            iteration_count=None,
+            total_milli_seconds=None,
+            avg_milli_seconds=None,
         )
 
     avg_milli_seconds = (seconds * 1000 / float(iterations))

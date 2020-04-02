@@ -5,7 +5,7 @@ service: performance-test
 
 handlers:
   - url: /.*
-    script: perf.app
+    script: app.app
     login: admin
     secure: always
 
@@ -19,4 +19,8 @@ skip_files:
   - ^venv$
 
 includes:
-  - env_variables.yaml
+  - env.yaml
+
+libraries:
+  - name: flask
+    version: latest

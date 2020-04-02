@@ -9,7 +9,7 @@ from google.appengine.ext import testbed
 from datastore_performance import constants
 from datastore_performance.benchmark_crud import _benchmark_READ_SINGLE_ROW
 from datastore_performance.benchmark_serialization import _benchmark_MODEL_TO_PROTOBUF_STRING
-from datastore_performance.models import DbModel10, NdbModel10, PgModel10
+from datastore_performance.models import DbModel10, NdbModel10, PgModel10, PgModel100
 
 _testbed = None
 _index_yaml_path = None
@@ -30,6 +30,12 @@ def setUpModule():
     _index_yaml_path = os.path.join("..")
     _index_updater = datastore_stub_index.IndexYamlUpdater(_index_yaml_path)
 
+    PgModel10.delete_table()
+    PgModel100.delete_table()
+
+    PgModel10.initalize_table()
+    PgModel100.initalize_table()
+
 
 def tearDownModule():
     global _testbed, _index_updater
@@ -37,6 +43,9 @@ def tearDownModule():
     # the datastore is cleared on test setup.
     _index_updater.UpdateIndexYaml()
     _testbed.deactivate()
+
+    PgModel10.delete_table()
+    PgModel100.delete_table()
 
 
 class TestFormatCsv(unittest.TestCase):

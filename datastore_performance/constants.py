@@ -92,7 +92,8 @@ def create_row(model_class):
     try:
         yield row, key
     finally:
-        model_class.delete([row])
+        if not issubclass(model_class, sql_api.PgQueryMixin):
+            model_class.delete([row])
 
 
 @contextmanager
@@ -113,7 +114,8 @@ def create_rows(model_class, count):
     try:
         yield rows, keys
     finally:
-        model_class.delete(rows)
+        if not issubclass(model_class, sql_api.PgQueryMixin):
+            model_class.delete(rows)
 
 
 def _resolve_key(row):

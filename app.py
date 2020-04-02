@@ -9,6 +9,7 @@ from marshmallow import Schema, fields
 from datastore_performance.benchmark_crud import benchmark_crud_models
 from datastore_performance.benchmark_serialization import benchmark_serialization_models
 from datastore_performance.constants import format_csv
+from datastore_performance.models import PgModel10, PgModel100
 
 
 class TestRunResult(Schema):
@@ -32,6 +33,12 @@ def hello():
 @app.route('/benchmark/serialization', defaults={'format': 'html'})
 @app.route('/benchmark/serialization.<format>')
 def benchmark_serialization(format):
+    PgModel10.delete_table()
+    PgModel100.delete_table()
+
+    PgModel10.initalize_table()
+    PgModel100.initalize_table()
+
     results = benchmark_serialization_models()
     if format == 'csv':
         return _render_csv(results, 'benchmark_serialization.remote.csv')
@@ -46,6 +53,12 @@ def benchmark_serialization(format):
 @app.route('/benchmark/crud/<run_test_groups>', defaults={'format': 'html'})
 @app.route('/benchmark/crud/<run_test_groups>.<format>')
 def benchmark_crud(run_test_groups, format):
+    PgModel10.delete_table()
+    PgModel100.delete_table()
+
+    PgModel10.initalize_table()
+    PgModel100.initalize_table()
+
     if run_test_groups:
         run_test_groups = tuple(filter(lambda x: x, run_test_groups.upper().split(',')))
 

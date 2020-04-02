@@ -20,6 +20,20 @@ pool = None
 class PgQueryMixin(object):
 
     @classmethod
+    def delete_table(cls):
+        with cursor() as db_cursor:
+            sql = "DROP TABLE IF EXISTS {table_name}".format(table_name=cls.__name__)
+            try:
+                db_cursor.execute("BEGIN")
+                db_cursor.execute(sql, tuple())
+                db_cursor.execute("COMMIT")
+            except Exception as e:
+                _logger.error("Failed to execute SQL: {}".format(sql))
+                _logger.exception(e.message)
+                db_cursor.execute("ROLLBACK")
+                raise NotImplementedError(sql)
+
+    @classmethod
     def initalize_table(cls):
         with cursor() as db_cursor:
             columns = [
@@ -29,8 +43,10 @@ class PgQueryMixin(object):
             columns = ", ".join(columns)
             sql = """
             CREATE TABLE IF NOT EXISTS {table_name} (
-                key_string varchar(256) PRIMARY KEY,
-                {columns}
+                key_id BIGINT NOT NULL,
+                namespace VARCHAR(24) NOT NULL,
+                {columns},
+                PRIMARY KEY(key_id, namespace)
             )
             """.format(
                 table_name=cls.__name__,
@@ -49,8 +65,7 @@ class PgQueryMixin(object):
 
     @classmethod
     def keys(cls, limit):
-        cls.initalize_table()
-        sql = "SELECT key_string FROM {table_name} ORDER BY key_string LIMIT {limit}".format(
+        sql = "SELECT key_id, namespace FROM {table_name} ORDER BY key_string LIMIT {limit}".format(
             table_name=cls.__name__,
             limit=limit,
         )
@@ -59,8 +74,9 @@ class PgQueryMixin(object):
             results = db_cursor.fetchall()
             keys = []
             for result in results:
-                key_string = result[0]
-                keys.append(db.Key(key_string))
+                key_id, namespace = result
+                key = db.Key.from_path(cls.kind(), key_id, namespace=namespace)
+                keys.append(key)
         return keys
 
     @classmethod
@@ -69,36 +85,38 @@ class PgQueryMixin(object):
         if not keys:
             return [] if multiple else None
 
-        cls.initalize_table()
+        columns = ['key_id', 'namespace']
+        columns.extend(sorted(cls._properties.keys()))
 
-        columns = sorted(cls._properties.keys())
-
-        key_strings = map(str, keys)
-        key_strings = map(lambda key_string: "'{key_string}'".format(key_string=key_string), key_strings)
-        key_strings = ','.join(key_strings)
-        sql = "SELECT key_string, {columns} FROM {table_name} WHERE key_string IN ({key_strings})".format(
+        sql = "SELECT {columns} FROM {table_name} WHERE key_id IN ({key_ids}) AND namespace = %s".format(
             table_name=cls.__name__,
-            key_strings=key_strings,
+            key_ids=', '.join(['%s' for _ in range(len(keys))]),
             columns=', '.join(columns),
         )
+        args = [key.id() for key in keys]
+        args.append(keys[0].namespace())
+        args = tuple(args)
 
         rows = []
         with cursor() as db_cursor:
             try:
                 db_cursor.execute("BEGIN")
-                db_cursor.execute(sql)
+                db_cursor.execute(sql, args)
                 results = db_cursor.fetchall()
                 db_cursor.execute("COMMIT")
             except Exception as e:
                 _logger.error("Failed to execute SQL: {}".format(sql))
                 _logger.exception(e.message)
                 db_cursor.execute("ROLLBACK")
-                raise NotImplementedError(sql)
+                raise NotImplementedError("{} / {}".format(sql, args))
 
             for result in results:
-                key_string = result[0]
-                row = cls(key=db.Key(key_string))
-                for index, column in enumerate(columns):
+                key_id = result[0]
+                namespace = result[1]
+                key = db.Key.from_path(cls.kind(), key_id, namespace=namespace)
+
+                row = cls(key=key)
+                for index, column in enumerate(columns[2:]):
                     value = result[index + 1]
                     setattr(row, column, value)
                 rows.append(row)
@@ -117,7 +135,6 @@ class PgQueryMixin(object):
 
     @classmethod
     def put(cls, models):
-        cls.initalize_table()
         if not models:
             return []
 
@@ -129,21 +146,21 @@ class PgQueryMixin(object):
             else:
                 insert_models.append(model)
 
-        columns = sorted(cls._properties.keys())
+        columns = ['key_id', 'namespace']
+        columns.extend(sorted(cls._properties.keys()))
 
         if insert_models:
-            row_values = ['%s' for _ in range(len(columns) + 1)]
+            row_values = ['%s' for _ in range(len(columns))]
             row_values = "({})".format(', '.join(row_values))
             values = [row_values for _ in range(len(insert_models))]
 
             args = []
             for model in models:
                 model._key = db.Key.from_path(cls.kind(), simpleflake(), namespace='benchmark_test')
-                row_args = [str(model.key())]
-                row_args += [getattr(model, column) for column in columns]
+                row_args = [getattr(model, column) for column in columns]
                 args.extend(row_args)
             args = tuple(args)
-            sql = "INSERT INTO {table_name} (key_string, {columns}) VALUES {values}".format(
+            sql = "INSERT INTO {table_name} ({columns}) VALUES {values}".format(
                 table_name=cls.__name__,
                 columns=', '.join(columns),
                 values=', '.join(values),
@@ -157,7 +174,7 @@ class PgQueryMixin(object):
                     _logger.error("Failed to execute SQL: {}".format(sql))
                     _logger.exception(e.message)
                     db_cursor.execute("ROLLBACK")
-                    raise NotImplementedError(sql)
+                    raise NotImplementedError("{} / {}".format(sql, args))
 
         if update_models:
             for model in update_models:
@@ -167,9 +184,10 @@ class PgQueryMixin(object):
                 assignments = ', '.join(assignments)
 
                 args = [getattr(model, column) for column in columns]
-                args.append(str(model._key))
+                args.append(model._key.id())
+                args.append(model._key.namespace())
                 args = tuple(args)
-                sql = "UPDATE {table_name} SET {assignments} WHERE key_string = %s".format(
+                sql = "UPDATE {table_name} SET {assignments} WHERE key_id = %s AND namespace = %s".format(
                     table_name=cls.__name__,
                     assignments=assignments,
                 )
@@ -182,37 +200,44 @@ class PgQueryMixin(object):
                     _logger.error("Failed to execute SQL: {}".format(sql))
                     _logger.exception(e.message)
                     db_cursor.execute("ROLLBACK")
-                    raise NotImplementedError(sql)
+                    raise NotImplementedError("{} / {}".format(sql, args))
 
     @classmethod
     def delete(cls, models):
-        cls.initalize_table()
         if not models:
             return
 
-        key_strings = map(str, map(lambda x: x.key(), models))
-        key_strings = map(lambda key_string: "'{key_string}'".format(key_string=key_string), key_strings)
-        key_strings = ','.join(key_strings)
-        sql = "DELETE FROM {table_name} WHERE key_string IN ({key_strings})".format(
+        sql = "DELETE FROM {table_name} WHERE key_id IN ({key_ids}) AND namespace = %s".format(
             table_name=cls.__name__,
-            key_strings=key_strings
+            key_ids=', '.join(['%s' for _ in range(len(models))])
         )
+        args = [model.key().id() for model in models]
+        args.append(models[0].key().namespace())
+        args = tuple(args)
         with cursor() as db_cursor:
             try:
                 db_cursor.execute("BEGIN")
-                db_cursor.execute(sql)
+                db_cursor.execute(sql, args)
                 db_cursor.execute("COMMIT")
             except Exception as e:
                 _logger.error("Failed to execute SQL: {}".format(sql))
                 _logger.exception(e.message)
                 db_cursor.execute("ROLLBACK")
-                raise NotImplementedError(sql)
+                raise NotImplementedError("{} / {}".format(sql, args))
 
     def key(self):
         if hasattr(self, '_key') and self._key:
             return self._key
         else:
             raise NotSavedError()
+
+    @property
+    def key_id(self):
+        return self.key().id()
+
+    @property
+    def namespace(self):
+        return self.key().namespace()
 
     def convert_to_proto(self):
         return self.convert_to_entity().ToPb()

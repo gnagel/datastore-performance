@@ -8,10 +8,12 @@ from google.appengine.ext import testbed
 
 from datastore_performance import benchmark_serialization
 from datastore_performance.constants import model_classes
+from datastore_performance.models import PgModel10, PgModel100
 
 _testbed = None
 _index_yaml_path = None
 _index_updater = None
+
 
 
 def setUpModule():
@@ -28,14 +30,22 @@ def setUpModule():
     _index_yaml_path = os.path.join("..")
     _index_updater = datastore_stub_index.IndexYamlUpdater(_index_yaml_path)
 
+    PgModel10.delete_table()
+    PgModel100.delete_table()
+
+    PgModel10.initalize_table()
+    PgModel100.initalize_table()
+
 
 def tearDownModule():
     global _testbed, _index_updater
     # We need to create a new updater instance for every test because
     # the datastore is cleared on test setup.
     _index_updater.UpdateIndexYaml()
-
     _testbed.deactivate()
+
+    PgModel10.delete_table()
+    PgModel100.delete_table()
 
 
 class TestBenchmarkSerializationModels(unittest.TestCase):

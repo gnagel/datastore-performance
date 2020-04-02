@@ -8,11 +8,6 @@ from google.appengine.ext import ndb
 from datastore_performance import models
 
 
-class SomeModel(db.Model):
-    foo = db.StringProperty(indexed=False)
-    bar = db.StringProperty(indexed=False)
-
-
 class Test(unittest.TestCase):
     def test_generated_models(self):
         model_types = [

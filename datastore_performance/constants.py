@@ -104,7 +104,10 @@ def create_rows(model_class, count):
         for property in row._properties.keys():
             setattr(row, property, str(uuid.uuid4()))
         rows.append(row)
-    model_class.put(rows)
+
+    # Batch it into chunks
+    for index in range(0, count, 50):
+        model_class.put(rows[index:index+50])
 
     # Wait till the data syncs to Datastore
     keys = map(_resolve_key, rows)

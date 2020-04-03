@@ -24,3 +24,10 @@ includes:
 libraries:
   - name: flask
     version: latest
+
+instance_class: B4_1G
+
+basic_scaling:
+  max_instances: 2
+  idle_timeout: 1m
+

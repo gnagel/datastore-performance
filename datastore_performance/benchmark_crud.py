@@ -12,7 +12,7 @@ from datastore_performance.constants import INSTANCES_TO_CREATE, create_result, 
 
 _logger = logging.getLogger(__name__)
 
-CRUD_ITERATIONS = 25
+CRUD_ITERATIONS = 100
 CRUD_BATCH_SIZE = 10
 
 

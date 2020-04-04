@@ -62,16 +62,7 @@ class CrudOperation(enum.Enum):
 
 def benchmark_crud_models(
         klasses=None,
-        run_test_groups=(
-                CrudOperation.READ.name,
-                CrudOperation.READ_MULTI.name,
-                CrudOperation.READ_BULK.name,
-                CrudOperation.CREATE.name,
-                CrudOperation.UPDATE.name,
-                CrudOperation.DELETE.name,
-                CrudOperation.ASYNC_READ.name,
-                CrudOperation.LAZY_READ.name,
-        )
+        run_test_groups=None
 ):
     if not klasses:
         klasses = model_classes()
@@ -118,7 +109,16 @@ def benchmark_crud_models(
     ]
 
     if not run_test_groups:
-        run_test_groups = [e.name for e in CrudOperation]
+        run_test_groups = (
+                CrudOperation.READ.name,
+                CrudOperation.READ_MULTI.name,
+                CrudOperation.READ_BULK.name,
+                CrudOperation.CREATE.name,
+                CrudOperation.UPDATE.name,
+                CrudOperation.DELETE.name,
+                CrudOperation.ASYNC_READ.name,
+                CrudOperation.LAZY_READ.name,
+        )
 
     tests = []
     for run_test_group in run_test_groups:
